@@ -1,0 +1,14 @@
+{
+    "mysql": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "remaid",
+        "table": "region",
+        "table": "country",
+        "table": "place",
+        "table": "media",
+        "table": "user",
+        "table": "usermedia"
+    }
+}
