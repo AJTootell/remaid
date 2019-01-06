@@ -5,7 +5,8 @@ const
 express = require('express'),
 app = express(),
 path = require('path'),
-util =  require('./util.js');
+util =  require('./util.js'),
+routes = require(path.join(__dirname, '../client/routes/index'));
 
 //check if there is an additional argument, if it is on the console.log debugs
 if(process.argv.length == 3){
@@ -16,16 +17,6 @@ if(process.argv.length == 3){
 app.set('views', './client/views');
 app.set('view engine', 'hbs');
 
-app.use(express.static('../client'));
-
-//get client side style sheet and javascript file
-app.get('/styleSheet',  function(req, res) {
-  res.sendFile(path.join(__dirname, '../client/CSS/','styleSheet.css'));
-});
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '../client/JavaScript','index.js'));
-});
-
-//redirect calls to server to appropriate frunctions in util or widget folder
+app.use('/', routes);
 
 app.listen(8080);
