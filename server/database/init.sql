@@ -1,7 +1,9 @@
 create database if not exists remaid;
 
-drop table if exists remaid.usermedia;
+drop table if exists remaid.usercate;
 drop table if exists remaid.user;
+drop table if exists remaid.medcate;
+drop table if exists remaid.category;
 drop table if exists remaid.media;
 drop table if exists remaid.place;
 drop table if exists remaid.country;
@@ -34,7 +36,6 @@ create table if not exists remaid.media (
   med_filepath varchar(50) not null,
   med_type varchar(5),
   med_year date,
-  med_category varchar(30),
   reg_id int,
   cou_id int,
   pla_id int,
@@ -46,26 +47,42 @@ create table if not exists remaid.media (
   REFERENCES place(pla_id)
 );
 
+create table if not exists remaid.category (
+  cate_id int not null auto_increment primary key,
+  cate_name varchar(15) not null
+);
+
+create table if not exists remaid.medcate (
+  medcate_id int not null auto_increment primary key,
+  cate_id int not null,
+  med_id int not null,
+  FOREIGN KEY fk_medcatecate(cate_id)
+  REFERENCES category(cate_id),
+  FOREIGN KEY fk_medcatemed(med_id)
+  REFERENCES media(med_id)
+);
+
 create table if not exists remaid.user (
   user_id int not null auto_increment primary key,
   user_name varchar(15) not null
 );
 
-create table if not exists remaid.usermedia (
-  usermed_id int not null auto_increment primary key,
-  med_id int not null,
+create table if not exists remaid.usercate (
+  usercate_id int not null auto_increment primary key,
+  cate_id int not null,
   user_id int not null,
-  FOREIGN KEY fk_usermedmed(med_id)
-  REFERENCES media(med_id),
-  FOREIGN KEY fk_usermeduser(user_id)
+  usercate_weight int not null,
+  FOREIGN KEY fk_usercatecate(cate_id)
+  REFERENCES category(cate_id),
+  FOREIGN KEY fk_usercateuser(user_id)
   REFERENCES user(user_id)
 );
 
 insert into region(reg_name) values ("UK");
 insert into country(cou_name, reg_id) values ("England", 1);
 
-insert into media(med_title, med_filepath, med_type, med_year, med_category, reg_id, cou_id) values ("queen", "photo\queen.png", "photo", "bands", 1980-01-01, 1, 1);
+insert into media(med_title, med_filepath, med_type, med_year, med_category, reg_id, cou_id) values ("queen", "photo\Queen.png", "photo", "band", 1980-01-01, 1, 1);
 
-insert into user(user_name) values ("770605");
+insert into category(cate_name) values ("band");
 
-insert into usermedia(med_id, user_id) values (1, 1);
+insert into medcate(cate_id, med_id) values (1, 1);
