@@ -64,7 +64,18 @@ create table if not exists remaid.medcate (
 
 create table if not exists remaid.user (
   user_id int not null auto_increment primary key,
-  user_name varchar(15) not null
+  user_name varchar(15) not null,
+  user_startDate date,
+  user_endDate date,
+  reg_id int,
+  cou_id int,
+  pla_id int,
+  FOREIGN KEY fk_medreg(reg_id)
+  REFERENCES region(reg_id),
+  FOREIGN KEY fk_medcou(cou_id)
+  REFERENCES country(cou_id),
+  FOREIGN KEY fk_medpla(pla_id)
+  REFERENCES place(pla_id)
 );
 
 create table if not exists remaid.usercate (

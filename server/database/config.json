@@ -4,11 +4,13 @@
         "user": "root",
         "password": "",
         "database": "remaid",
-        "table": "region",
-        "table": "country",
-        "table": "place",
-        "table": "media",
+        "table": "usercate",
         "table": "user",
-        "table": "usermedia"
+        "table": "medcate",
+        "table": "category",
+        "table": "media",
+        "table": "place",
+        "table": "country",
+        "table": "region"
     }
 }
