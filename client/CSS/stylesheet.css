@@ -1,8 +1,15 @@
-body {
-  width: 90%;
-  height: 90%;
+body, html {
+  width: 99%;
+  height: 99%;
 }
 
 p {
   color: red;
+}
+
+.half_button {
+  width : 40%;
+  height: 90%;
+  margin: 4%;
+  display: inline-block;
 }

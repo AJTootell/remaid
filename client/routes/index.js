@@ -1,9 +1,18 @@
-var
+const
+path = require('path'),
 express = require('express'),
-router = express.Router();
+app = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.render('index');
+app.get('/', function(req, res, next) {
+  res.render('mainMenu');
+});
+
+app.get('/mediaDisplay', function(req, res, next) {
+  res.render('mediaDisplay');
+});
+
+app.get('/filter', function(req, res, next) {
+  res.render('filter');
 });
 
 app.get('/styleSheet',  function(req, res) {
@@ -13,4 +22,4 @@ app.get('/index', function(req, res) {
   res.sendFile(path.join(__dirname, '../JavaScript','index.js'));
 });
 
-module.exports = router;
+module.exports = app;
