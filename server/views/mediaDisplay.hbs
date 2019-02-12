@@ -1,0 +1,12 @@
+{{#if isPhoto}}
+  <image class="media" src="{{{mediaUrl}}}" alt="{{{mediaAlt}}}"></image>
+{{else if isVideo}}
+  <video><source src="{{{mediaUrl}}}" type="video/webm">{{{mediaAlt}}}</video>
+{{else}}
+  <audio controls src="{{{mediaUrl}}}"></audio>
+{{/if}}
+<mediaButtons>
+  <button type="button" id="next_button" class="halfQuarter_button" onclick= "redirect('/mediaDisplay')">Next media</button>
+
+  <button type="button" id="quit_button" class="halfQuarter_button" onclick= "redirect('/')">Quit</button>
+</mediaButtons>

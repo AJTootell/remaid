@@ -1,7 +1,7 @@
 var
 debugging,
 mysql = require('mysql'),
-config = require('./database/config.json');
+config = require('../database/config.json');
 
 //turn on debugging
 function debugable(state){
@@ -34,24 +34,19 @@ function queryDB(query, datacb){
   });
 
   sqlCon.query(query, function (err, data) {
-    debug("Querying");
-    //debug(data);
     if(err) {
-      //cb(err);
       throw err;
       broke = true;
       sqlCon.end();
     } else{
-      /*data.forEach(function(row){
-      debug("Results: "+JSON.stringify(row));
-    });*/
     results = data;
-    debug(JSON.stringify(results));
     broke = false;
     sqlCon.end();
   };
 });
-sqlCon.on('end',function(){datacb(broke,results)});
+if (datacb){
+  sqlCon.on('end',function(){datacb(broke,results)});
+}
 }
 
 module.exports.debugable = debugable;

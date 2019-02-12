@@ -4,8 +4,8 @@
   "description": "reminiscence aid for PwD",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "debug": "node server/index.js on",
+    "start": "node server/JavaScript/server.js",
+    "debug": "node server/JavaScript/server.js on",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
