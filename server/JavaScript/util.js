@@ -28,6 +28,8 @@ function queryDB(query, datacb){
   sqlCon = mysql.createConnection(config.mysql),
   broke;
 
+  sqlCon.connect();
+
   sqlCon.on('error',function(err) {
     debug(err);
     sqlCon.end();
