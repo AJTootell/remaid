@@ -1,9 +1,9 @@
 {
     "mysql": {
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "remaid",
+        "host": "b8rg15mwxwynuk9q.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+        "user": "mojv9m3zhgkyjfo6",
+        "password": "khks04mtsjxoaa6y",
+        "database": "rdc01hn4hfiuo1rv",
         "table": "usercate",
         "table": "user",
         "table": "medcate",

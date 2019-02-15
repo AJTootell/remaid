@@ -25,7 +25,7 @@ function queryDB(query, datacb){
   debug("\nQuery ran: " + query);
   var
   results,
-  sqlCon = mysql.createConnection(process.env.JAWSDB_URL),
+  sqlCon = mysql.createConnection(config.mysql),
   broke;
 
   sqlCon.on('error',function(err) {
