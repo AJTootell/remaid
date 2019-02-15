@@ -1,20 +1,18 @@
-create database if not exists remaid;
+drop table if exists rdc01hn4hfiuo1rv.usercate;
+drop table if exists rdc01hn4hfiuo1rv.user;
+drop table if exists rdc01hn4hfiuo1rv.medcate;
+drop table if exists rdc01hn4hfiuo1rv.category;
+drop table if exists rdc01hn4hfiuo1rv.media;
+drop table if exists rdc01hn4hfiuo1rv.place;
+drop table if exists rdc01hn4hfiuo1rv.country;
+drop table if exists rdc01hn4hfiuo1rv.region;
 
-drop table if exists remaid.usercate;
-drop table if exists remaid.user;
-drop table if exists remaid.medcate;
-drop table if exists remaid.category;
-drop table if exists remaid.media;
-drop table if exists remaid.place;
-drop table if exists remaid.country;
-drop table if exists remaid.region;
-
-create table if not exists remaid.region (
+create table if not exists rdc01hn4hfiuo1rv.region (
   reg_id int not null auto_increment primary key,
   reg_name varchar(30)
 );
 
-create table if not exists remaid.country (
+create table if not exists rdc01hn4hfiuo1rv.country (
   cou_id int not null auto_increment primary key,
   cou_name varchar(30),
   reg_id int not null,
@@ -22,7 +20,7 @@ create table if not exists remaid.country (
   REFERENCES region(reg_id)
 );
 
-create table if not exists remaid.place (
+create table if not exists rdc01hn4hfiuo1rv.place (
   pla_id int not null auto_increment primary key,
   pla_name varchar(30),
   cou_id int not null,
@@ -30,7 +28,7 @@ create table if not exists remaid.place (
   REFERENCES country(cou_id)
 );
 
-create table if not exists remaid.media (
+create table if not exists rdc01hn4hfiuo1rv.media (
   med_id int not null auto_increment primary key,
   med_title varchar(30),
   med_filepath varchar(50) not null,
@@ -48,12 +46,12 @@ create table if not exists remaid.media (
   REFERENCES place(pla_id)
 );
 
-create table if not exists remaid.category (
+create table if not exists rdc01hn4hfiuo1rv.category (
   cate_id int not null auto_increment primary key,
   cate_name varchar(15) not null
 );
 
-create table if not exists remaid.medcate (
+create table if not exists rdc01hn4hfiuo1rv.medcate (
   medcate_id int not null auto_increment primary key,
   cate_id int not null,
   med_id int not null,
@@ -63,7 +61,7 @@ create table if not exists remaid.medcate (
   REFERENCES media(med_id)
 );
 
-create table if not exists remaid.user (
+create table if not exists rdc01hn4hfiuo1rv.user (
   user_id int not null auto_increment primary key,
   user_loginTime time,
   user_startDate date,
@@ -79,7 +77,7 @@ create table if not exists remaid.user (
   REFERENCES place(pla_id)
 );
 
-create table if not exists remaid.usercate (
+create table if not exists rdc01hn4hfiuo1rv.usercate (
   usercate_id int not null auto_increment primary key,
   cate_id int not null,
   user_id int not null,
@@ -90,11 +88,11 @@ create table if not exists remaid.usercate (
   REFERENCES user(user_id)
 );
 
-insert into remaid.region(reg_name) values ("UK");
-insert into remaid.country(cou_name, reg_id) values ("England", 1);
+insert into rdc01hn4hfiuo1rv.region(reg_name) values ("UK");
+insert into rdc01hn4hfiuo1rv.country(cou_name, reg_id) values ("England", 1);
 
-insert into remaid.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("queen", "photo\\Queen.png", "image of the band queen", "photo", 1980-01-01, 1, 1);
+insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("queen", "photo\\Queen.png", "image of the band queen", "photo", 1980-01-01, 1, 1);
 
-insert into remaid.category(cate_name) values ("band");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("band");
 
-insert into remaid.medcate(cate_id, med_id) values (1, 1);
+insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (1, 1);
