@@ -20,4 +20,4 @@ app.set('view engine', 'hbs');
 app.use('/', routes);
 app.use(express.static('server/media'));
 
-app.listen(5000);
+app.listen(process.env.PORT || 8080);
