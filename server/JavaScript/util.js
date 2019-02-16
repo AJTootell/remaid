@@ -25,29 +25,29 @@ function queryDB(query, datacb){
   debug("\nQuery ran: " + query);
   var
   results,
-  sqlCon = mysql.createConnection(process.env.JAWSDB_URL || config.mysql),
-  broke;
+  connection = mysql.createConnection(process.env.JAWSDB_URL),// || config.mysql),
+  isErr;
 
-  sqlCon.connect();
+  connection.connect();
 
-  sqlCon.on('error',function(err) {
+  connection.on('error',function(err) {
     debug(err);
-    sqlCon.end();
+    connection.end();
   });
 
-  sqlCon.query(query, function (err, data) {
+  connection.query(query, function (err, data) {
     if(err) {
       throw err;
-      broke = true;
-      sqlCon.end();
+      isErr = true;
+      connection.end();
     } else{
     results = data;
-    broke = false;
-    sqlCon.end();
+    isErr = false;
+    connection.end();
   };
 });
 if (datacb){
-  sqlCon.on('end',function(){datacb(broke,results)});
+  connection.on('end',function(){datacb(isErr,results)});
 }
 }
 
