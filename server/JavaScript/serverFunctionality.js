@@ -19,7 +19,7 @@ check user list every 5 mins and if they haven't done anything for the last 15 m
 */
 
 function checkUserTimeout() {
-  var query = 'select user_id,user_loginTime from remaid.user';
+  var query = 'select user_id,user_loginTime from rdc01hn4hfiuo1rv.user';
 
   function queryCB(err,data) {
     for (var i=0;i<data.length;i++){
@@ -43,8 +43,8 @@ remove a user and all thier data from the database
 function removeUser (userId) {
   util.debug("removing user");
 
-  var query = 'delete from remaid.usercate where user_id = ' + userId + ';';
-  query += 'delete from remaid.user where user_id = ' + userId;
+  var query = 'delete from rdc01hn4hfiuo1rv.usercate where user_id = ' + userId + ';';
+  query += 'delete from rdc01hn4hfiuo1rv.user where user_id = ' + userId;
 
   util.queryDB(query);
 }
@@ -56,7 +56,7 @@ function getMedia (renderCB) {
 
   util.debug("getting media");
 
-  var query = 'select med_filepath,med_alt,med_type from remaid.media where med_id = ' + "1" + ';';
+  var query = 'select med_filepath,med_alt,med_type from rdc01hn4hfiuo1rv.media where med_id = ' + "1" + ';';
 
   function queryCB(err,data){
     var mediaUrl = data[0].med_filepath,
