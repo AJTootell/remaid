@@ -2,6 +2,45 @@ function redirect (url){
   location.href = url;
 }
 
+function addMediaFilter(mediaType){
+  var
+  userId = sessionStorage.getItem('user_id'),
+  elName = mediaType + '_filter_button',
+  buttonEl = document.getElementById(elName),
+  url = '/addFilter?',
+  xhr = new XMLHttpRequest(),
+  weight = 0;
+
+  if (buttonEl.textContent.includes('Selected')) {
+    weight = 0;
+    buttonEl.textContent = capitalizeFirstLetter(mediaType) + ": Hidden";
+  }
+  else{
+    weight = 1;
+    buttonEl.textContent = capitalizeFirstLetter(mediaType) + ": Selected";
+  }
+
+  url += "user="+userId+"&";
+  url += "type="+mediaType+"&";
+  url += "weight="+weight;
+  console.log(url);
+  xhr.open('POST', url, true);
+  xhr.send();
+
+}
+
+function addTimeFilter(){
+
+}
+
+function addCategory(){
+
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 //if connection without a user_id in session data then create a new user
 window.addEventListener('load', function() {
   var

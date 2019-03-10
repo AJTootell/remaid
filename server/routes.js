@@ -7,6 +7,9 @@ serverFunc = require('./JavaScript/serverFunctionality.js');
 app.get('/', function(req, res, next) {
   res.render('mainMenu');
 });
+app.get('/mediaChoice', function(req, res, next) {
+  res.render('mediaChoice');
+});
 app.get('/mediaDisplay', function(req, res, next) {
   function renderCB(mediaData) {
     res.render('mediaDisplay',mediaData);
@@ -18,7 +21,8 @@ app.get('/filter', function(req, res, next) {
 });
 
 app.get('/styleSheet',  function(req, res) {
-  res.sendFile(path.join(__dirname, 'CSS/','styleSheet.css'));
+  //console.log("Getting CSS");
+  res.sendFile(path.join(__dirname, '/CSS/','styleSheet.css'));
 });
 app.get('/client', function(req, res) {
   res.sendFile(path.join(__dirname, 'JavaScript/','client.js'));
@@ -32,7 +36,7 @@ app.get('/getMedia', function(req,res){
   serverFunc.getMedia(req, res)
 });
 
-app.get('/addFilter', function(req,res){
+app.post('/addFilter', function(req,res){
   serverFunc.addFilter(req, res)
 });
 

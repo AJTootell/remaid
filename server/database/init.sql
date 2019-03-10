@@ -64,6 +64,9 @@ create table if not exists rdc01hn4hfiuo1rv.medcate (
 create table if not exists rdc01hn4hfiuo1rv.user (
   user_id int not null auto_increment primary key,
   user_loginTime time,
+  user_showPhoto int,
+  user_showVideo int,
+  user_showAudio int,
   user_startDate date,
   user_endDate date,
   reg_id int,

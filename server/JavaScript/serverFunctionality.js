@@ -6,7 +6,7 @@ add a new user to the database
 function addUser (req,res) {
   var time = new Date();
   time = time.getHours() + ':' + time.getMinutes();
-  var query = 'insert into user(user_loginTime) values ("'+time+'")';
+  var query = 'insert into user(user_loginTime,user_showPhoto,user_showVideo,user_showAudio) values ("'+time+'",1,1,1)';
   function queryCB(err,data) {
     res.send(JSON.stringify(data.insertId));
   }
@@ -44,7 +44,6 @@ function removeUser (userId) {
   util.debug("removing user");
 
   var query = 'delete from rdc01hn4hfiuo1rv.usercate where user_id = ' + userId + ';';
-  query += 'delete from rdc01hn4hfiuo1rv.user where user_id = ' + userId;
 
   util.queryDB(query);
 }
@@ -84,6 +83,49 @@ add a new filter for the user
 */
 function addFilter (req,res) {
 
+  var user_id = req.query.user;
+
+  util.debug(req.query.type);
+  util.debug(user_id);
+  switch(req.query.type) {
+    case "category":
+      var
+      cate_name = req.query.category,
+      weight = req.query.weight,
+      query = 'select from rdc01hn4hfiuo1rv.cate where cate_name =' + req.query.cate_name;
+
+      function queryCB (err,data) {
+        var
+        cate_id = data[0].cate_id,
+        query = 'insert into rdc01hn4hfiuo1rv.usercate(cate_id, user_id, usercate_weight) values ';
+        query+= cate_id + ', ';
+        query+= user_id + ', ';
+        query+= weight;
+
+        util.queryDB(query);
+      }
+
+
+      util.queryDB(query, queryCB);
+      break;
+
+    case "time":
+      var
+      startDate = req.query.startDate,
+      endDate = req.query.endDate;
+      var query = 'update rdc01hn4hfiuo1rv.user set user_startDate = '+startDate+' user_endDate = '+endDate+' where user_id = '+user_id+';';
+
+      util.queryDB(query);
+      break;
+    case "photo":
+    case "video":
+    case "audio":
+      var query = 'update rdc01hn4hfiuo1rv.user set user_show'+util.capitalize(req.query.type)+' = '+req.query.weight+' where user_id = '+user_id+';';
+      util.queryDB(query);
+      break;
+    default:
+      break;
+  }
 }
 
 /*

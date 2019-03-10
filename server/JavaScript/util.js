@@ -51,6 +51,11 @@ if (datacb){
 }
 }
 
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 module.exports.debugable = debugable;
 module.exports.debug = debug;
 module.exports.queryDB = queryDB;
+module.exports.capitalize = capitalize;
