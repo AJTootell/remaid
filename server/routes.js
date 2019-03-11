@@ -11,10 +11,10 @@ app.get('/mediaChoice', function(req, res, next) {
   res.render('mediaChoice');
 });
 app.get('/mediaDisplay', function(req, res, next) {
-  function renderCB(mediaData) {
-    res.render('mediaDisplay',mediaData);
-  }
-  serverFunc.getMedia(renderCB);
+//  function renderCB(mediaData) {
+  res.render('mediaDisplay');//,mediaData);
+//  }
+  //serverFunc.oldGetMedia(renderCB);
 });
 app.get('/filter', function(req, res, next) {
   res.render('filter');

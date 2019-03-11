@@ -37,26 +37,79 @@ function addCategory(){
 
 }
 
+function getMedia(){
+  var userId,
+  url = '/getMedia',
+  xhr = new XMLHttpRequest();
+
+  userId = sessionStorage.getItem('user_id');
+  url += '?user='+userId;
+
+  console.log(url);
+
+  xhr.open('GET', url, true);
+  xhr.onload = function() {
+    var media = JSON.parse(xhr.responseText),
+    el,
+    elParent = document.getElementById('mediaHolder');
+    switch(media.med_type){
+      case "photo":
+        console.log("photo");
+        el = document.createElement('image');
+        el.src = media.med_filepath;
+        el.alt = media.med_alt;
+        document.body.appendChild(el);
+        break;
+      case "video":
+        el = document.createElement('video');
+        break;
+      case "audio":
+        el = document.createElement('audio');
+        break;
+      default:
+        console.log("Media type not supported")
+        break;
+    }
+    console.log(el);
+    /*
+    {{#if isPhoto}}
+      <image class="media" src="{{{mediaUrl}}}" alt="{{{mediaAlt}}}"></image>
+    {{else if isVideo}}
+      <video><source src="{{{mediaUrl}}}" type="video/webm">{{{mediaAlt}}}</video>
+    {{else}}
+      <audio controls src="{{{mediaUrl}}}"></audio>
+    {{/if}}
+    */
+  }
+  xhr.send();
+}
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 //if connection without a user_id in session data then create a new user
 window.addEventListener('load', function() {
-  var
-  userId,
-  url = '/addUser',
-  xhr = new XMLHttpRequest();
-
-  userId = sessionStorage.getItem('user_id');
-  console.log(userId);
-  if (userId == null){
-    xhr.open('GET', url, true);
-    xhr.onload = function() {
-      console.log(xhr.responseText);
-      var user_id = JSON.parse(xhr.responseText);
-      sessionStorage.setItem('user_id', user_id);
+  var urlEnding = location.href.split('/').pop();
+  console.log('%'+urlEnding+'%');
+  if (urlEnding == ''){
+    var
+    userId,
+    url = '/addUser',
+    xhr = new XMLHttpRequest();
+    console.log('checking user id');
+    userId = sessionStorage.getItem('user_id');
+    if (userId == null){
+      xhr.open('GET', url, true);
+      xhr.onload = function() {
+        var user_id = JSON.parse(xhr.responseText);
+        console.log("New user given ID: "+ user_id);
+        sessionStorage.setItem('user_id', user_id);
+      }
+      xhr.send();
     }
-    xhr.send();
+  }
+  else if (urlEnding == 'mediaDisplay') {
+    getMedia();
   }
 });

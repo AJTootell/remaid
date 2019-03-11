@@ -94,7 +94,9 @@ create table if not exists rdc01hn4hfiuo1rv.usercate (
 insert into rdc01hn4hfiuo1rv.region(reg_name) values ("UK");
 insert into rdc01hn4hfiuo1rv.country(cou_name, reg_id) values ("England", 1);
 
-insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("queen", "photo\\Queen.png", "image of the band queen", "photo", 1980-01-01, 1, 1);
+insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("queen", "photo/Queen.png", "image of the band queen", "photo", 1980-01-01, 1, 1);
+insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("hovis", "video/HovisAdvert1973.mp4", "Hovis bike advert from 1973", "video", 1973-01-01, 1, 1);
+insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("drunkSailer", "audio/DrunkenSailer.mp3", "Drunken sailor shanty", "audio", 1800-01-01, 1, 1);
 
 insert into rdc01hn4hfiuo1rv.category(cate_name) values ("band");
 

@@ -44,11 +44,11 @@ function queryDB(query, datacb){
     results = data;
     isErr = false;
     connection.end();
-  };
-});
-if (datacb){
-  connection.on('end',function(){datacb(isErr,results)});
-}
+    };
+  });
+  if (datacb){
+    connection.on('end',function(){datacb(isErr,results)});
+  }
 }
 
 function capitalize(string) {

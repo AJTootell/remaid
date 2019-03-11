@@ -51,31 +51,40 @@ function removeUser (userId) {
 /*
 return a random media
 */
-function getMedia (renderCB) {
+function getMedia (req,res){
 
   util.debug("getting media");
+  util.debug(req.query.user);
 
-  var query = 'select med_filepath,med_alt,med_type from rdc01hn4hfiuo1rv.media where med_id = ' + "1" + ';';
+  var query = 'select med_filepath,med_alt,med_type from rdc01hn4hfiuo1rv.media;',
+  userId = req.query.user;
 
-  function queryCB(err,data){
-    var mediaUrl = data[0].med_filepath,
-    mediaAlt = data[0].med_alt,
-    mediaType = data[0].med_type,
-    isPhoto = false,
-    isVideo = false;
-    if (mediaType == "photo"){
-      isPhoto = true;
+  function mediaQueryCB(err,data){
+
+    var query = 'select * from rdc01hn4hfiuo1rv.user where user_id = '+userId+';',//user_showPhoto,user_showVideo,user_showAudio from rdc01hn4hfiuo1rv.user where user_id = '+userId+';',
+    mediaArr = data;
+
+    function userQueryCB(err,data2){
+      var filteredMedia = [];
+      for (var i=0;i<mediaArr.length;i++){
+        if (mediaArr[i].med_type == "photo" && data2[0].user_showPhoto == '1'){
+          filteredMedia.push(mediaArr[i])
+        }
+        if (mediaArr[i].med_type == "video" && data2[0].user_showVideo == '1'){
+          filteredMedia.push(mediaArr[i])
+        }
+        if (mediaArr[i].med_type == "audio" && data2[0].user_showAudio == '1'){
+          filteredMedia.push(mediaArr[i])
+        }
+      }
+      var rng = Math.floor(Math.random() * filteredMedia.length);
+      util.debug('filteredMedia');
+      util.debug(filteredMedia);
+      res.send(JSON.stringify(filteredMedia[rng]));
     }
-    else if (mediaType == "video") {
-      isVideo = true;
-    }
-    util.debug({mediaUrl:mediaUrl,mediaAlt:mediaAlt,isPhoto:isPhoto,isVideo:isVideo});
-    renderCB({mediaUrl:mediaUrl,mediaAlt:mediaAlt,isPhoto:isPhoto,isVideo:isVideo});
+    util.queryDB(query, userQueryCB);
   }
-
-  util.queryDB(query, queryCB);
-
-
+  util.queryDB(query, mediaQueryCB);
 }
 
 /*
