@@ -1,4 +1,5 @@
 drop table if exists rdc01hn4hfiuo1rv.usercate;
+drop table if exists rdc01hn4hfiuo1rv.usermed;
 drop table if exists rdc01hn4hfiuo1rv.user;
 drop table if exists rdc01hn4hfiuo1rv.medcate;
 drop table if exists rdc01hn4hfiuo1rv.category;
@@ -88,6 +89,16 @@ create table if not exists rdc01hn4hfiuo1rv.usercate (
   FOREIGN KEY fk_usercatecate(cate_id)
   REFERENCES category(cate_id),
   FOREIGN KEY fk_usercateuser(user_id)
+  REFERENCES user(user_id)
+);
+
+create table if not exists rdc01hn4hfiuo1rv.usermed (
+  usermed int not null auto_increment primary key,
+  med_id int not null,
+  user_id int not null,
+  FOREIGN KEY fk_usermedmed(med_id)
+  REFERENCES media(med_id),
+  FOREIGN KEY fk_usermeduser(user_id)
   REFERENCES user(user_id)
 );
 

@@ -36,8 +36,16 @@ app.get('/getMedia', function(req,res){
   serverFunc.getMedia(req, res)
 });
 
+app.post('/viewedMedia', function(req,res){
+  serverFunc.viewedMedia(req, res)
+});
+
 app.post('/addFilter', function(req,res){
   serverFunc.addFilter(req, res)
+});
+
+app.get('/getFilters', function(req,res){
+  serverFunc.getFilters(req, res)
 });
 
 app.get('/getCategory', function(req,res){
