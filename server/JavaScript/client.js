@@ -4,7 +4,7 @@ function redirect (url){
 
 function addMediaFilter(mediaType){
   var
-  userId = sessionStorage.getItem('user_id'),
+  userId = sessionStorage.getItem('userId'),
   elName = mediaType + '_filter_button',
   buttonEl = document.getElementById(elName),
   url = '/addFilter?',
@@ -20,7 +20,7 @@ function addMediaFilter(mediaType){
     buttonEl.textContent = capitalizeFirstLetter(mediaType) + ": Selected";
   }
 
-  url += "user="+userId+"&";
+  url += "userId="+userId+"&";
   url += "type="+mediaType+"&";
   url += "weight="+weight;
   console.log(url);
@@ -41,8 +41,8 @@ function getMedia(){
   url = '/getMedia',
   xhr = new XMLHttpRequest();
 
-  userId = sessionStorage.getItem('user_id');
-  url += '?user='+userId;
+  userId = sessionStorage.getItem('userId');
+  url += '?userId='+userId;
 
   xhr.open('GET', url, true);
   xhr.onload = function() {
@@ -61,7 +61,7 @@ function getMedia(){
         el.src = media.med_filepath;
         el.alt = media.med_alt;
 
-        el.id = media.med_id;
+        //el.id = media.med_id;
         elParent.appendChild(el);
         break;
       case "video":
@@ -72,7 +72,7 @@ function getMedia(){
         el.textContent = media.med_alt;
         el.controls = ' ';
 
-        el.id = media.med_id;
+        //el.id = media.med_id;
         el.appendChild(elSrc);
         elParent.appendChild(el);
         break;
@@ -81,7 +81,7 @@ function getMedia(){
         el.src = media.med_filepath;
         el.controls = ' ';
 
-        el.id = media.med_id;
+        //el.id = media.med_id;
         elParent.appendChild(el);
         break;
       default:
@@ -100,30 +100,11 @@ function getMedia(){
   xhr.send();
 }
 
-function nextMedia(){
-  var medId = document.getElementById('mediaHolder').childNodes[1].id,
-  userId = sessionStorage.getItem('user_id'),
-  url = '/viewedMedia?',
-  xhr = new XMLHttpRequest();
-/*
-  console.log(document.getElementById('mediaHolder'));
-  console.log(document.getElementById('mediaHolder').childNodes);
-  console.log(document.getElementById('mediaHolder').childNodes[1]);
-  console.log(document.getElementById('mediaHolder').childNodes[1].id);
-*/
-  url += 'userId='+userId+'&medId='+medId;
-  xhr.open('POST', url, true);
-  xhr.onload = function() {
-    redirect('/mediaDisplay');
-  }
-  xhr.send();
-}
-
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-//if connection without a user_id in session data then create a new user
+//if connection without a userId in session data then create a new user
 window.addEventListener('load', function() {
   var urlEnding = location.href.split('/').pop();
   console.log('%'+urlEnding+'%');
@@ -133,13 +114,13 @@ window.addEventListener('load', function() {
     url = '/addUser',
     xhr = new XMLHttpRequest();
     console.log('checking user id');
-    userId = sessionStorage.getItem('user_id');
+    userId = sessionStorage.getItem('userId');
     if (userId == null){
       xhr.open('GET', url, true);
       xhr.onload = function() {
-        var user_id = JSON.parse(xhr.responseText);
-        console.log("New user given ID: "+ user_id);
-        sessionStorage.setItem('user_id', user_id);
+        var newUserId = JSON.parse(xhr.responseText);
+        console.log("New user given ID: "+ newUserId);
+        sessionStorage.setItem('userId', newUserId);
       }
       xhr.send();
     }
@@ -149,11 +130,11 @@ window.addEventListener('load', function() {
   }
   else if (urlEnding == 'mediaChoice') {
     var
-    userId = sessionStorage.getItem('user_id'),
+    userId = sessionStorage.getItem('userId'),
     url = '/getFilters?',
     xhr = new XMLHttpRequest();
 
-    url += "user="+userId;
+    url += "userId="+userId;
     xhr.open('GET', url, true);
     xhr.onload = function() {
       var filters = JSON.parse(xhr.responseText).filters;

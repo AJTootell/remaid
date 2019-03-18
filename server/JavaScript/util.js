@@ -41,9 +41,9 @@ function queryDB(query, datacb){
       isErr = true;
       connection.end();
     } else{
-    results = data;
-    isErr = false;
-    connection.end();
+      results = data;
+      isErr = false;
+      connection.end();
     };
   });
   if (datacb){

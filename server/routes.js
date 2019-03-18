@@ -2,7 +2,8 @@ const
 path = require('path'),
 express = require('express'),
 app = express.Router(),
-serverFunc = require('./JavaScript/serverFunctionality.js');
+serverFunc = require('./JavaScript/serverFunctionality.js'),
+getMedia = require('./JavaScript/selectionAlgorithm.js').getMedia;
 
 app.get('/', function(req, res, next) {
   res.render('mainMenu');
@@ -33,11 +34,8 @@ app.get('/addUser', function(req,res){
 });
 
 app.get('/getMedia', function(req,res){
-  serverFunc.getMedia(req, res)
-});
-
-app.post('/viewedMedia', function(req,res){
-  serverFunc.viewedMedia(req, res)
+  serverFunc.updateLoginTime(req.query.userId);
+  getMedia(req, res)
 });
 
 app.post('/addFilter', function(req,res){

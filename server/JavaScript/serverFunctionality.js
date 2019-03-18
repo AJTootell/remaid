@@ -56,79 +56,11 @@ function removeUser (userId) {
 }
 
 /*
-return a random media
-*/
-function getMedia (req,res){
-  util.debug("getting media");
-  util.debug(req.query.user);
-
-  var query = 'select med_id,med_filepath,med_alt,med_type from rdc01hn4hfiuo1rv.media;',
-  userId = req.query.user;
-  updateLoginTime(userId);
-
-  function mediaQueryCB(err,data){
-
-    var query = 'select * from rdc01hn4hfiuo1rv.user where user_id = '+userId+';',
-    mediaArr = data;
-
-    function userQueryCB(err,data2){
-      var filteredMedia = [];
-      for (var i=0;i<mediaArr.length;i++){
-        if (mediaArr[i].med_type == "photo" && data2[0].user_showPhoto == '1'){
-          filteredMedia.push(mediaArr[i])
-        }
-        if (mediaArr[i].med_type == "video" && data2[0].user_showVideo == '1'){
-          filteredMedia.push(mediaArr[i])
-        }
-        if (mediaArr[i].med_type == "audio" && data2[0].user_showAudio == '1'){
-          filteredMedia.push(mediaArr[i])
-        }
-      }
-
-      var query = 'select * from rdc01hn4hfiuo1rv.usermed where user_id = '+userId+';';
-
-      function usermedQueryCB(err, data3){
-        var newMedia = filteredMedia.filter(function(value, index, arr){
-          for (var j=0; j<data3.length; j++){
-            if (value.med_id == data3[j].med_id){
-              return false;
-            }
-          }
-          return true;
-        });
-
-        var rng = Math.floor(Math.random() * newMedia.length);
-        util.debug('filteredMedia');
-        util.debug(newMedia);
-        res.send(JSON.stringify(newMedia[rng]));
-      }
-      util.queryDB(query, usermedQueryCB);
-    }
-    util.queryDB(query, userQueryCB);
-  }
-  util.queryDB(query, mediaQueryCB);
-}
-
-function viewedMedia(req,res){
-  var userId = req.query.userId,
-  medId = req.query.medId,
-  query = 'insert into rdc01hn4hfiuo1rv.usermed(user_id, med_id) values (';
-  updateLoginTime(userId);
-
-  query+= userId + ', ';
-  query+= medId + ');';
-  function queryCB(){
-    res.send();
-  }
-  util.queryDB(query,queryCB);
-}
-
-/*
 add a new filter for the user
 */
 function addFilter (req,res) {
 
-  var userId = req.query.user;
+  var userId = req.query.userId;
   updateLoginTime(userId);
 
   util.debug(req.query.type);
@@ -175,7 +107,7 @@ function addFilter (req,res) {
 }
 
 function getFilters(req,res){
-  var userId = req.query.user,
+  var userId = req.query.userId,
   query = "select user_showPhoto,user_showVideo,user_showAudio from rdc01hn4hfiuo1rv.user where user_id = "+userId;
   updateLoginTime(userId);
 
@@ -208,9 +140,8 @@ function addWeight (req,res) {
 
 module.exports.addUser = addUser;
 module.exports.removeUser = removeUser;
-module.exports.getMedia = getMedia;
-module.exports.viewedMedia = viewedMedia;
 module.exports.addFilter = addFilter;
 module.exports.getFilters = getFilters;
 module.exports.getCategory = getCategory;
 module.exports.addWeight = addWeight;
+module.exports.updateLoginTime = updateLoginTime;
