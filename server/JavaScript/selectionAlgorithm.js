@@ -8,7 +8,6 @@ Select all the media currently available
 */
 
 function mediaQueryCB(err,data){
-
   media = data;
 
   var query = 'select * from rdc01hn4hfiuo1rv.usermed where user_id = '+userId+';';
@@ -20,6 +19,9 @@ removed alredy viewed media
 */
 
 function usermedQueryCB(err, data){
+
+  util.debug("All media:");
+  util.debug(media);
   var newMedia = media.filter(function(value, index, arr){
     for (var j=0; j<data.length; j++){
       if (value.med_id == data[j].med_id){
@@ -40,6 +42,8 @@ Filter out irelevant media based on user filters
 */
 
 function userQueryCB(err,data){
+  util.debug("Not viewed media:");
+  util.debug(media);
 
   var userData = data[0];
 
@@ -121,9 +125,11 @@ Add array of categories for each media
 */
 
 function medcateQueryCB(err,data){
+  util.debug("Type, time and lcoation filtered media:");
+  util.debug(media);
 
   for (var i=0;i<data.length;i++){
-    for (var j=0;i<media.length;j++){
+    for (var j=0;j<media.length;j++){
       if(data[i].med_id == media[j].med_id){
         if (media[j].hasOwnProperty('categories')){
           media[j].categories.push(data[i].cate_id);
@@ -146,25 +152,25 @@ Add each media every time based on combined weights of it's categories
 
 function usercateQueryCB(err,data){
 
-  var multipliedMedia = [];
+  var multipleMedia = [];
 
-  if (!data){
-    selectRandom();
-    return;
+  if (data.length == 0){
+    util.debug("No categories specified for this user.");
   }
-
-  for (var i=0; i<data.length;i++){
-    for (var j=0;j<media.length;j++){
-      if (media[j].categories.includes(data[i].cate_id)) {
-        for (var k=0;k<data[i].usercate_weight;k++){
-          multipleMedia.push(media[j]);
+  else{
+    util.debug("Categories specified.");
+    for (var i=0; i<data.length;i++){
+      for (var j=0;j<media.length;j++){
+        if (media[j].categories.includes(data[i].cate_id)) {
+          for (var k=0;k<data[i].usercate_weight;k++){
+            multipleMedia.push(media[j]);
+          }
         }
       }
     }
+
+    media = multipleMedia;
   }
-
-  media = multipleMedia;
-
   selectRandom();
 }
 
@@ -173,6 +179,9 @@ Select a random media from the created array
 */
 
 function selectRandom(){
+
+  util.debug("Multiplied based on categories media:");
+  util.debug(media);
 
   var rng = Math.floor(Math.random() * media.length);
 
@@ -186,8 +195,8 @@ function selectRandom(){
 
 
 function viewedMedia(medId){
-  var medId = req.query.medId,
-  query = 'insert into rdc01hn4hfiuo1rv.usermed(user_id, med_id) values (';
+
+  var query = 'insert into rdc01hn4hfiuo1rv.usermed(user_id, med_id) values (';
 
   query+= userId + ', ';
   query+= medId + ');';
