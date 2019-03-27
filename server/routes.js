@@ -20,6 +20,15 @@ app.get('/mediaDisplay', function(req, res, next) {
 app.get('/filter', function(req, res, next) {
   res.render('filter');
 });
+app.get('/category', function(req, res, next) {
+  res.render('category');
+});
+app.get('/time', function(req, res, next) {
+  res.render('time');
+});
+app.get('/geo', function(req, res, next) {
+  res.render('geo');
+});
 
 app.get('/styleSheet',  function(req, res) {
   //console.log("Getting CSS");
@@ -49,10 +58,5 @@ app.get('/getFilters', function(req,res){
 app.get('/getCategory', function(req,res){
   serverFunc.getCategory(req, res)
 });
-
-app.get('/addWeight', function(req,res){
-  serverFunc.addWeight(req, res)
-});
-
 
 module.exports = app;

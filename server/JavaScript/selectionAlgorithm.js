@@ -188,7 +188,9 @@ function selectRandom(){
   util.debug('filteredMedia');
   util.debug(media);
 
-  viewedMedia(media[rng].med_id);
+  if (media.length != 0){
+    viewedMedia(media[rng].med_id);
+  }
 
   res.send(JSON.stringify(media[rng]));
 }
