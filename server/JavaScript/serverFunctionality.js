@@ -1,9 +1,14 @@
 const util =  require('./util.js');
 
 /*
-add a new user to the database
+addUser - add a new user to the database
+//
+Params:
+  req - request from client with query data
+  res - response data to send to the client
 */
-function addUser (req,res) {
+
+function addUser(req,res){
   var time = new Date();
   time = time.getHours() + ':' + time.getMinutes();
   var query = 'insert into rdc01hn4hfiuo1rv.user(user_loginTime,user_showPhoto,user_showVideo,user_showAudio) values ("'+time+'",1,1,1)';
@@ -14,6 +19,13 @@ function addUser (req,res) {
 
 }
 
+/*
+updateLoginTime -
+//
+Params:
+  userId
+*/
+
 function updateLoginTime(userId){
   var time = new Date();
   time = time.getHours() + ':' + time.getMinutes();
@@ -22,10 +34,10 @@ function updateLoginTime(userId){
 }
 
 /*
-check user list every 5 mins and if they haven't done anything for the last 15 mins then remove user data from db
+checkUserTimeout - check user list every 5 mins and if they haven't done anything for the last 15 mins then remove user data from db
 */
 
-function checkUserTimeout() {
+function checkUserTimeout(){
   var query = 'select user_id,user_loginTime from rdc01hn4hfiuo1rv.user';
 
   function queryCB(err,data) {
@@ -45,9 +57,13 @@ function checkUserTimeout() {
 }
 
 /*
-remove a user and all thier data from the database
+removeUser - remove a user and all thier data from the database
+//
+Params:
+  userId
 */
-function removeUser (userId) {
+
+function removeUser(userId){
   util.debug("removing user");
 
   var query = 'delete from rdc01hn4hfiuo1rv.usercate where user_id = ' + userId + ';';
@@ -65,9 +81,14 @@ function removeUser (userId) {
 }
 
 /*
-add a new filter for the user
+addFilter - add a new filter for the user
+//
+Params:
+  req - request from client with query data
+  res - response data to send to the client
 */
-function addFilter (req,res) {
+
+function addFilter(req,res){
 
   var userId = req.query.userId;
   updateLoginTime(userId);
@@ -110,6 +131,14 @@ function addFilter (req,res) {
   }
 }
 
+/*
+getFilters -
+//
+Params:
+  req - request from client with query data
+  res - response data to send to the client
+*/
+
 function getFilters(req,res){
   var userId = req.query.userId,
   query = "select user_showPhoto,user_showVideo,user_showAudio from rdc01hn4hfiuo1rv.user where user_id = "+userId+';';
@@ -125,9 +154,14 @@ function getFilters(req,res){
 }
 
 /*
-return a random category
+getCategory - return a random category
+//
+Params:
+  req - request from client with query data
+  res - response data to send to the client
 */
-function getCategory (req,res) {
+
+function getCategory(req,res){
   var userId = req.query.userId,
   query = "select * from rdc01hn4hfiuo1rv.usercate where user_id = "+userId+';';
   updateLoginTime(userId);

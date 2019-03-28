@@ -4,7 +4,11 @@ media,
 userId;
 
 /*
-Select all the media currently available
+mediaQueryCB - Select all the media currently available
+
+Params:
+  err - flag if errors occured during sql query
+  data - data return from the sql query
 */
 
 function mediaQueryCB(err,data){
@@ -15,7 +19,11 @@ function mediaQueryCB(err,data){
 }
 
 /*
-removed alredy viewed media
+usermedQueryCB - removed alredy viewed media
+
+Params:
+  err - flag if errors occured during sql query
+  data - data return from the sql query
 */
 
 function usermedQueryCB(err, data){
@@ -38,7 +46,11 @@ function usermedQueryCB(err, data){
 }
 
 /*
-Filter out irelevant media based on user filters
+userQueryCB - Filter out irelevant media based on user filters
+
+Params:
+  err - flag if errors occured during sql query
+  data - data return from the sql query
 */
 
 function userQueryCB(err,data){
@@ -121,7 +133,11 @@ function userQueryCB(err,data){
 }
 
 /*
-Add array of categories for each media
+medcateQueryCB - Add array of categories for each media
+
+Params:
+  err - flag if errors occured during sql query
+  data - data return from the sql query
 */
 
 function medcateQueryCB(err,data){
@@ -147,7 +163,11 @@ function medcateQueryCB(err,data){
 }
 
 /*
-Add each media every time based on combined weights of it's categories
+usercateQueryCB - Add each media every time based on combined weights of it's categories
+
+Params:
+  err - flag if errors occured during sql query
+  data - data return from the sql query
 */
 
 function usercateQueryCB(err,data){
@@ -175,7 +195,7 @@ function usercateQueryCB(err,data){
 }
 
 /*
-Select a random media from the created array
+selectRandom - Select a random media from the created array and send to the user
 */
 
 function selectRandom(){
@@ -195,6 +215,12 @@ function selectRandom(){
   res.send(JSON.stringify(media[rng]));
 }
 
+/*
+viewedMedia - Mark a media as viewed
+
+Params:
+  medId
+*/
 
 function viewedMedia(medId){
 
@@ -207,8 +233,12 @@ function viewedMedia(medId){
 }
 
 /*
-return a random media
+getMedia - sends a random media to the client based on all set filters
+
+Params:
+  req,localRes
 */
+
 function getMedia (req,localRes){
   util.debug("getting media");
 

@@ -1,6 +1,19 @@
+/*
+redirect - changes the url of the page
+
+Params:
+  url - new url to call
+*/
+
 function redirect (url){
   location.href = url;
 }
+/*
+addMediaFilter - Adds a new filters for users for given media type
+
+Params:
+  mediaType - type of media to filter out
+*/
 
 function addMediaFilter(mediaType){
   var
@@ -27,14 +40,23 @@ function addMediaFilter(mediaType){
   xhr.open('POST', url, true);
   xhr.send();
 }
+/*
+addTimeFilter - todo
+*/
 
 function addTimeFilter(){
 
 }
+/*
+addCategory - todo
+*/
 
 function addCategory(){
 
 }
+/*
+getMedia - gets a new media from server and displays dynamically on the page
+*/
 
 function getMedia(){
   var userId,
@@ -100,6 +122,10 @@ function getMedia(){
   xhr.send();
 }
 
+/*
+addUser - add a new user to server and set user id in browsers' local storage
+*/
+
 function addUser(){
   var
   userId,
@@ -117,6 +143,10 @@ function addUser(){
     xhr.send();
   }
 }
+
+/*
+presetTypeFilters - set media type buttons to match users preferences
+*/
 
 function presetTypeFilters(){
   var
@@ -142,6 +172,12 @@ function presetTypeFilters(){
   }
   xhr.send();
 }
+/*
+toggleCategories - toggle button text from hidden to selected and vice versa
+
+Params:
+  elButton - button element to toggle
+*/
 
 function toggleCategories(elButton){
   if (elButton.textContent.includes('Hidden')){
@@ -150,6 +186,12 @@ function toggleCategories(elButton){
     elButton.textContent = elButton.textContent.replace('Selected','Hidden');
   }
 }
+/*
+leaveCate - add new categorey filters to user
+
+Params:
+  url - url to redirect user to when categories has been updated
+*/
 
 function leaveCate(url){
 
@@ -185,6 +227,9 @@ function leaveCate(url){
 
   redirect(url);
 }
+/*
+getCategories - populate the page with 4 new random categories from server
+*/
 
 function getCategories(){
   var
@@ -215,24 +260,31 @@ function getCategories(){
   xhr.send();
 }
 
+/*
+capitalizeFirstLetter - capitalize the first letter of the passed string
+*/
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-//if connection without a userId in session data then create a new user
 window.addEventListener('load', function() {
   var urlEnding = location.href.split('/').pop();
   switch(urlEnding){
     case '':
+      //if connection without a userId in session data then create a new user
       addUser();
       break;
     case 'mediaDisplay':
+      //get media from server and display it on the page
       getMedia();
       break;
     case 'mediaChoice':
+      //set the pages filter button to match the users current or default preferences
       presetTypeFilters();
       break;
     case 'category':
+      //populate the page with 4 new random categories
       getCategories();
       break;
     default:
