@@ -52,75 +52,16 @@ function removeUser (userId) {
 
   var query = 'delete from rdc01hn4hfiuo1rv.usercate where user_id = ' + userId + ';';
 
-  util.queryDB(query);
-}
-
-/*
-return a random media
-*/
-function getMedia (req,res){
-  util.debug("getting media");
-  util.debug(req.query.user);
-
-  var query = 'select med_id,med_filepath,med_alt,med_type from rdc01hn4hfiuo1rv.media;',
-  userId = req.query.user;
-  updateLoginTime(userId);
-
-  function mediaQueryCB(err,data){
-
-    var query = 'select * from rdc01hn4hfiuo1rv.user where user_id = '+userId+';',
-    mediaArr = data;
-
-    function userQueryCB(err,data2){
-      var filteredMedia = [];
-      for (var i=0;i<mediaArr.length;i++){
-        if (mediaArr[i].med_type == "photo" && data2[0].user_showPhoto == '1'){
-          filteredMedia.push(mediaArr[i])
-        }
-        if (mediaArr[i].med_type == "video" && data2[0].user_showVideo == '1'){
-          filteredMedia.push(mediaArr[i])
-        }
-        if (mediaArr[i].med_type == "audio" && data2[0].user_showAudio == '1'){
-          filteredMedia.push(mediaArr[i])
-        }
-      }
-
-      var query = 'select * from rdc01hn4hfiuo1rv.usermed where user_id = '+userId+';';
-
-      function usermedQueryCB(err, data3){
-        var newMedia = filteredMedia.filter(function(value, index, arr){
-          for (var j=0; j<data3.length; j++){
-            if (value.med_id == data3[j].med_id){
-              return false;
-            }
-          }
-          return true;
-        });
-
-        var rng = Math.floor(Math.random() * newMedia.length);
-        util.debug('filteredMedia');
-        util.debug(newMedia);
-        res.send(JSON.stringify(newMedia[rng]));
-      }
-      util.queryDB(query, usermedQueryCB);
+  function usercateCB(err,data){
+    var query = 'delete from rdc01hn4hfiuo1rv.usermed where user_id = ' + userId + ';';
+    function usermedCB(err,data){
+      var query = 'delete from rdc01hn4hfiuo1rv.user where user_id = ' + userId + ';';
+      util.queryDB(query);
     }
-    util.queryDB(query, userQueryCB);
+    util.queryDB(query,usermedCB);
   }
-  util.queryDB(query, mediaQueryCB);
-}
 
-function viewedMedia(req,res){
-  var userId = req.query.userId,
-  medId = req.query.medId,
-  query = 'insert into rdc01hn4hfiuo1rv.usermed(user_id, med_id) values (';
-  updateLoginTime(userId);
-
-  query+= userId + ', ';
-  query+= medId + ');';
-  function queryCB(){
-    res.send();
-  }
-  util.queryDB(query,queryCB);
+  util.queryDB(query,usercateCB);
 }
 
 /*
@@ -128,7 +69,7 @@ add a new filter for the user
 */
 function addFilter (req,res) {
 
-  var userId = req.query.user;
+  var userId = req.query.userId;
   updateLoginTime(userId);
 
   util.debug(req.query.type);
@@ -136,23 +77,16 @@ function addFilter (req,res) {
   switch(req.query.type) {
     case "category":
       var
-      cate_name = req.query.category,
-      weight = req.query.weight,
-      query = 'select from rdc01hn4hfiuo1rv.cate where cate_name =' + req.query.cate_name;
+      cateId = req.query.cateId,
+      weight = req.query.weight;
 
-      function queryCB (err,data) {
-        var
-        cate_id = data[0].cate_id,
-        query = 'insert into rdc01hn4hfiuo1rv.usercate(cate_id, user_id, usercate_weight) values ';
-        query+= cate_id + ', ';
-        query+= userId + ', ';
-        query+= weight;
+      var query = 'insert into rdc01hn4hfiuo1rv.usercate(cate_id, user_id, usercate_weight) values (';
+      query+= cateId + ', ';
+      query+= userId + ', ';
+      query+= weight +');';
 
-        util.queryDB(query);
-      }
+      util.queryDB(query);
 
-
-      util.queryDB(query, queryCB);
       break;
 
     case "time":
@@ -162,6 +96,8 @@ function addFilter (req,res) {
       var query = 'update rdc01hn4hfiuo1rv.user set user_startDate = '+startDate+' user_endDate = '+endDate+' where user_id = '+userId+';';
 
       util.queryDB(query);
+      break;
+    case "location":
       break;
     case "photo":
     case "video":
@@ -175,8 +111,8 @@ function addFilter (req,res) {
 }
 
 function getFilters(req,res){
-  var userId = req.query.user,
-  query = "select user_showPhoto,user_showVideo,user_showAudio from rdc01hn4hfiuo1rv.user where user_id = "+userId;
+  var userId = req.query.userId,
+  query = "select user_showPhoto,user_showVideo,user_showAudio from rdc01hn4hfiuo1rv.user where user_id = "+userId+';';
   updateLoginTime(userId);
 
   function queryCB(err,data){
@@ -184,8 +120,6 @@ function getFilters(req,res){
       {"name": "video", "weight": data[0].user_showVideo},
       {"name": "audio", "weight": data[0].user_showAudio}]};
     res.send(JSON.stringify(filters));
-
-
   }
   util.queryDB(query, queryCB);
 }
@@ -194,13 +128,43 @@ function getFilters(req,res){
 return a random category
 */
 function getCategory (req,res) {
+  var userId = req.query.userId,
+  query = "select * from rdc01hn4hfiuo1rv.usercate where user_id = "+userId+';';
+  updateLoginTime(userId);
+  function usercateQueryCB(err,data){
+    var userSelected = data,
+    query = "select * from rdc01hn4hfiuo1rv.category;";
+    function cateQueryCB(err,data){
+      var categories = data.filter(function(value, index, arr){
+        for (var i=0;i<userSelected.length;i++){
+          if (userSelected[i].cate_id == value.cate_id){
+            return false;
+          }
+        }
+        return true;
+      });
+      var rdmCate = [];
+      while(rdmCate.length<4){
+        if(rdmCate.length == categories.length){
+          break;
+        }
+        var rng = Math.floor(Math.random() * categories.length),
+        used = false;
+        for (var i=0;i<rdmCate.length;i++){
+          if (rdmCate[i].cate_id == categories[rng].cate_id){
+            used = true;
+          }
+        }
+        if (!used){
+          rdmCate.push(categories[rng]);
+        }
+      }
+      res.send(JSON.stringify(rdmCate));
+    }
+    util.queryDB(query, cateQueryCB);
 
-}
-
-/*
-increment or deincrement weight of a user category
-*/
-function addWeight (req,res) {
+  }
+  util.queryDB(query, usercateQueryCB);
 
 }
 
@@ -208,9 +172,7 @@ function addWeight (req,res) {
 
 module.exports.addUser = addUser;
 module.exports.removeUser = removeUser;
-module.exports.getMedia = getMedia;
-module.exports.viewedMedia = viewedMedia;
 module.exports.addFilter = addFilter;
 module.exports.getFilters = getFilters;
 module.exports.getCategory = getCategory;
-module.exports.addWeight = addWeight;
+module.exports.updateLoginTime = updateLoginTime;

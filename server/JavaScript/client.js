@@ -4,7 +4,7 @@ function redirect (url){
 
 function addMediaFilter(mediaType){
   var
-  userId = sessionStorage.getItem('user_id'),
+  userId = sessionStorage.getItem('userId'),
   elName = mediaType + '_filter_button',
   buttonEl = document.getElementById(elName),
   url = '/addFilter?',
@@ -20,7 +20,7 @@ function addMediaFilter(mediaType){
     buttonEl.textContent = capitalizeFirstLetter(mediaType) + ": Selected";
   }
 
-  url += "user="+userId+"&";
+  url += "userId="+userId+"&";
   url += "type="+mediaType+"&";
   url += "weight="+weight;
   console.log(url);
@@ -41,8 +41,8 @@ function getMedia(){
   url = '/getMedia',
   xhr = new XMLHttpRequest();
 
-  userId = sessionStorage.getItem('user_id');
-  url += '?user='+userId;
+  userId = sessionStorage.getItem('userId');
+  url += '?userId='+userId;
 
   xhr.open('GET', url, true);
   xhr.onload = function() {
@@ -61,7 +61,7 @@ function getMedia(){
         el.src = media.med_filepath;
         el.alt = media.med_alt;
 
-        el.id = media.med_id;
+        //el.id = media.med_id;
         elParent.appendChild(el);
         break;
       case "video":
@@ -72,7 +72,7 @@ function getMedia(){
         el.textContent = media.med_alt;
         el.controls = ' ';
 
-        el.id = media.med_id;
+        //el.id = media.med_id;
         el.appendChild(elSrc);
         elParent.appendChild(el);
         break;
@@ -81,7 +81,7 @@ function getMedia(){
         el.src = media.med_filepath;
         el.controls = ' ';
 
-        el.id = media.med_id;
+        //el.id = media.med_id;
         elParent.appendChild(el);
         break;
       default:
@@ -100,21 +100,117 @@ function getMedia(){
   xhr.send();
 }
 
-function nextMedia(){
-  var medId = document.getElementById('mediaHolder').childNodes[1].id,
-  userId = sessionStorage.getItem('user_id'),
-  url = '/viewedMedia?',
+function addUser(){
+  var
+  userId,
+  url = '/addUser',
   xhr = new XMLHttpRequest();
-/*
-  console.log(document.getElementById('mediaHolder'));
-  console.log(document.getElementById('mediaHolder').childNodes);
-  console.log(document.getElementById('mediaHolder').childNodes[1]);
-  console.log(document.getElementById('mediaHolder').childNodes[1].id);
-*/
-  url += 'userId='+userId+'&medId='+medId;
-  xhr.open('POST', url, true);
+  console.log('checking user id');
+  userId = sessionStorage.getItem('userId');
+  if (userId == null){
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      var newUserId = JSON.parse(xhr.responseText);
+      console.log("New user given ID: "+ newUserId);
+      sessionStorage.setItem('userId', newUserId);
+    }
+    xhr.send();
+  }
+}
+
+function presetTypeFilters(){
+  var
+  userId = sessionStorage.getItem('userId'),
+  url = '/getFilters?',
+  xhr = new XMLHttpRequest();
+
+  url += "userId="+userId;
+  xhr.open('GET', url, true);
   xhr.onload = function() {
-    redirect('/mediaDisplay');
+    var filters = JSON.parse(xhr.responseText).filters;
+    for (var i=0;i<filters.length;i++){
+      var
+      elName = filters[i].name + '_filter_button',
+      buttonEl = document.getElementById(elName);
+      if (filters[i].weight == 1){
+        buttonEl.textContent = capitalizeFirstLetter(filters[i].name) + ": Selected";
+      }
+      else{
+        buttonEl.textContent = capitalizeFirstLetter(filters[i].name) + ": Hidden";
+      }
+    }
+  }
+  xhr.send();
+}
+
+function toggleCategories(elButton){
+  if (elButton.textContent.includes('Hidden')){
+    elButton.textContent = elButton.textContent.replace('Hidden','Selected');
+  }else{
+    elButton.textContent = elButton.textContent.replace('Selected','Hidden');
+  }
+}
+
+function leaveCate(url){
+
+  var elParent = document.getElementById('buttonHolder'),
+  userId = sessionStorage.getItem('userId');
+
+  for (var i=1;i<elParent.childNodes.length;i++){
+    console.log(elParent.childNodes[i]);
+
+
+    var
+    elButton = elParent.childNodes[i],
+    funcUrl = '/addFilter?',
+    xhr = new XMLHttpRequest(),
+    cateId = elButton.id.split('_')[0],
+    type = 'category',
+    weight;
+
+    if (elButton.textContent.includes('Hidden')){
+      weight = 0;
+    }else{
+      weight = 1;
+    }
+
+    funcUrl += 'userId='+userId;
+    funcUrl += '&type='+type;
+    funcUrl += '&cateId='+cateId;
+    funcUrl += '&weight='+weight;
+
+    xhr.open('POST', funcUrl, true);
+    xhr.send();
+  }
+
+  redirect(url);
+}
+
+function getCategories(){
+  var
+  userId = sessionStorage.getItem('userId'),
+  url = '/getCategory?',
+  xhr = new XMLHttpRequest();
+
+  url += "userId="+userId;
+  xhr.open('GET', url, true);
+  xhr.onload = function() {
+    var categories = JSON.parse(xhr.responseText),
+    elParent = document.getElementById('buttonHolder');
+    for (var i=0;i<categories.length;i++){
+      var elName = categories[i].cate_id + '_category_button',
+      elButton = document.createElement('button');
+
+      elButton.id = elName;
+      elButton.classList.add('half_threeEight_button');
+      elButton.textContent = capitalizeFirstLetter(categories[i].cate_name)+': Hidden';
+
+      elButton.onclick = function(){
+        toggleCategories(this);
+      }
+
+      elParent.appendChild(elButton);
+    }
   }
   xhr.send();
 }
@@ -123,52 +219,24 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-//if connection without a user_id in session data then create a new user
+//if connection without a userId in session data then create a new user
 window.addEventListener('load', function() {
   var urlEnding = location.href.split('/').pop();
-  console.log('%'+urlEnding+'%');
-  if (urlEnding == ''){
-    var
-    userId,
-    url = '/addUser',
-    xhr = new XMLHttpRequest();
-    console.log('checking user id');
-    userId = sessionStorage.getItem('user_id');
-    if (userId == null){
-      xhr.open('GET', url, true);
-      xhr.onload = function() {
-        var user_id = JSON.parse(xhr.responseText);
-        console.log("New user given ID: "+ user_id);
-        sessionStorage.setItem('user_id', user_id);
-      }
-      xhr.send();
-    }
-  }
-  else if (urlEnding == 'mediaDisplay') {
-    getMedia();
-  }
-  else if (urlEnding == 'mediaChoice') {
-    var
-    userId = sessionStorage.getItem('user_id'),
-    url = '/getFilters?',
-    xhr = new XMLHttpRequest();
+  switch(urlEnding){
+    case '':
+      addUser();
+      break;
+    case 'mediaDisplay':
+      getMedia();
+      break;
+    case 'mediaChoice':
+      presetTypeFilters();
+      break;
+    case 'category':
+      getCategories();
+      break;
+    default:
+      break;
 
-    url += "user="+userId;
-    xhr.open('GET', url, true);
-    xhr.onload = function() {
-      var filters = JSON.parse(xhr.responseText).filters;
-      for (var i=0;i<filters.length;i++){
-        var
-        elName = filters[i].name + '_filter_button',
-        buttonEl = document.getElementById(elName);
-        if (filters[i].weight == 1){
-          buttonEl.textContent = capitalizeFirstLetter(filters[i].name) + ": Selected";
-        }
-        else{
-          buttonEl.textContent = capitalizeFirstLetter(filters[i].name) + ": Hidden";
-        }
-      }
-    }
-    xhr.send();
   }
 });

@@ -102,13 +102,22 @@ create table if not exists rdc01hn4hfiuo1rv.usermed (
   REFERENCES user(user_id)
 );
 
-insert into rdc01hn4hfiuo1rv.region(reg_name) values ("UK");
+insert into rdc01hn4hfiuo1rv.region(reg_name) values ("Europe");
 insert into rdc01hn4hfiuo1rv.country(cou_name, reg_id) values ("England", 1);
 
 insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("queen", "photo/Queen.png", "image of the band queen", "photo", 1980-01-01, 1, 1);
 insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("hovis", "video/HovisAdvert1973.mp4", "Hovis bike advert from 1973", "video", 1973-01-01, 1, 1);
-insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("drunkSailer", "audio/DrunkenSailer.mp3", "Drunken sailor shanty", "audio", 1800-01-01, 1, 1);
+insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year) values ("drunkSailer", "audio/DrunkenSailer.mp3", "Drunken sailor shanty", "audio", 1800-01-01);
 
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("band");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Music");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Adverts");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Sailing");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("World War 2");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Church");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Animals");
+insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Everyday life");
 
 insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (1, 1);
+insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (2, 2);
+insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (3, 3);
+insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (7, 2);

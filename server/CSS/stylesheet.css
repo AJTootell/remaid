@@ -12,6 +12,11 @@ mediaButtons {
   height: 40%;
 }
 
+buttonHolder {
+  width: 99%;
+  height: 70%;
+}
+
 .half_whole_button {
   width : 40%;
   height: 90%;
@@ -38,7 +43,13 @@ mediaButtons {
 }
 .half_quarter_button {
   width : 45%;
-  height: 12%;
+  height: 20%;
+  margin: 2%;
+  display: inline-block;
+}
+.half_threeEight_button {
+  width : 45%;
+  height: 30%;
   margin: 2%;
   display: inline-block;
 }

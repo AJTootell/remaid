@@ -2,7 +2,8 @@ const
 path = require('path'),
 express = require('express'),
 app = express.Router(),
-serverFunc = require('./JavaScript/serverFunctionality.js');
+serverFunc = require('./JavaScript/serverFunctionality.js'),
+getMedia = require('./JavaScript/selectionAlgorithm.js').getMedia;
 
 app.get('/', function(req, res, next) {
   res.render('mainMenu');
@@ -19,6 +20,15 @@ app.get('/mediaDisplay', function(req, res, next) {
 app.get('/filter', function(req, res, next) {
   res.render('filter');
 });
+app.get('/category', function(req, res, next) {
+  res.render('category');
+});
+app.get('/time', function(req, res, next) {
+  res.render('time');
+});
+app.get('/geo', function(req, res, next) {
+  res.render('geo');
+});
 
 app.get('/styleSheet',  function(req, res) {
   //console.log("Getting CSS");
@@ -33,11 +43,8 @@ app.get('/addUser', function(req,res){
 });
 
 app.get('/getMedia', function(req,res){
-  serverFunc.getMedia(req, res)
-});
-
-app.post('/viewedMedia', function(req,res){
-  serverFunc.viewedMedia(req, res)
+  serverFunc.updateLoginTime(req.query.userId);
+  getMedia(req, res)
 });
 
 app.post('/addFilter', function(req,res){
@@ -51,10 +58,5 @@ app.get('/getFilters', function(req,res){
 app.get('/getCategory', function(req,res){
   serverFunc.getCategory(req, res)
 });
-
-app.get('/addWeight', function(req,res){
-  serverFunc.addWeight(req, res)
-});
-
 
 module.exports = app;
