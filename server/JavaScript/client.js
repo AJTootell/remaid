@@ -1,6 +1,18 @@
+/*
+redirect
+params:
+return:
+*/
+
 function redirect (url){
   location.href = url;
 }
+
+/*
+addMediaFilter
+params:
+return:
+*/
 
 function addMediaFilter(mediaType){
   var
@@ -28,13 +40,31 @@ function addMediaFilter(mediaType){
   xhr.send();
 }
 
+/*
+addTimeFilter
+params:
+return:
+*/
+
 function addTimeFilter(){
 
 }
 
+/*
+addCategory
+params:
+return:
+*/
+
 function addCategory(){
 
 }
+
+/*
+getMedia
+params:
+return:
+*/
 
 function getMedia(){
   var userId,
@@ -100,6 +130,12 @@ function getMedia(){
   xhr.send();
 }
 
+/*
+addUser
+params:
+return:
+*/
+
 function addUser(){
   var
   userId,
@@ -117,6 +153,12 @@ function addUser(){
     xhr.send();
   }
 }
+
+/*
+presetTypeFilters
+params:
+return:
+*/
 
 function presetTypeFilters(){
   var
@@ -143,6 +185,12 @@ function presetTypeFilters(){
   xhr.send();
 }
 
+/*
+toggleCategories
+params:
+return:
+*/
+
 function toggleCategories(elButton){
   if (elButton.textContent.includes('Hidden')){
     elButton.textContent = elButton.textContent.replace('Hidden','Selected');
@@ -150,6 +198,91 @@ function toggleCategories(elButton){
     elButton.textContent = elButton.textContent.replace('Selected','Hidden');
   }
 }
+
+/*
+setupSlider
+params:
+return:
+*/
+
+function setupSlider(){
+  var slider = document.getElementById('slider');
+
+  noUiSlider.create(slider, {
+    start: [10, 90],
+    range: {
+        'min': [0],
+        'max': [100]
+    },
+    connect: [false, true, false]
+  });
+
+  slider.style.height = '25px';
+  slider.style.width = '90%';
+  slider.style.margin = '0 auto 10px';
+  // When the slider value changes, update the input and span
+  slider.noUiSlider.on('update', function (values, handle) {
+    console.log(handle);
+    changeTime("slider"+handle, values[handle]);
+  });
+}
+
+/*
+changeTime
+params:
+return:
+*/
+
+function changeTime(id, value){
+  switch(id){
+    case "slider0":
+      document.getElementById('min').value = 1900+parseInt(value);
+      break;
+    case "slider1":
+      document.getElementById('max').value = 1900+parseInt(value);
+      break;
+    case "min":
+
+    case "max":
+
+    default:
+      break;
+  }
+}
+
+/*
+leaveTime
+params:
+return:
+*/
+
+function leaveTime(url){
+  var
+  userId = sessionStorage.getItem('userId'),
+  url = '/addFilter?',
+  xhr = new XMLHttpRequest(),
+  type = "time",
+  startDate = document.getElementById('min').value,
+  endDate = document.getElementById('max').value;
+
+  url += "userId="+userId;
+  xhr.open('GET', url, true);
+
+  funcUrl += 'userId='+userId;
+  funcUrl += '&type='+type;
+  funcUrl += '&startDate='+startDate;
+  funcUrl += '&endDate='+endDate;
+
+  xhr.send();
+
+  redirect(url);
+}
+
+/*
+leaveCate
+params:
+return:
+*/
 
 function leaveCate(url){
 
@@ -186,6 +319,12 @@ function leaveCate(url){
   redirect(url);
 }
 
+/*
+getCategories
+params:
+return:
+*/
+
 function getCategories(){
   var
   userId = sessionStorage.getItem('userId'),
@@ -215,6 +354,12 @@ function getCategories(){
   xhr.send();
 }
 
+/*
+capitalizeFirstLetter
+params:
+return:
+*/
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -234,6 +379,9 @@ window.addEventListener('load', function() {
       break;
     case 'category':
       getCategories();
+      break;
+    case 'time':
+      setupSlider();
       break;
     default:
       break;
