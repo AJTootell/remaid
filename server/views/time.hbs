@@ -1,0 +1,8 @@
+<div id="slider">
+</div>
+<br/>
+<input type="number" name="quantity" min="1900" max="2000" onchange="changeTime(this.id, this.value)" id="min">
+<input type="number" name="quantity" min="1900" max="2000" onchange="changeTime(this.id, this.value)" id="max">
+<br/>
+<button type="button" id="cancel_button" class="half_quarter_button" onclick="redirect('/filter')">Cancel</button>
+<button type="button" id="save_button" class="half_quarter_button" onclick="leaveTime('/filter')">Save</button>
