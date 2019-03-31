@@ -29,10 +29,10 @@ app.get('/geo', function(req, res, next) {
 
 app.get('/styleSheet',  function(req, res) {
   //console.log("Getting CSS");
-  res.sendFile(path.join(__dirname, 'styleSheet.css'));
+  res.sendFile(path.join(__dirname, '/styleSheet.css'));
 });
 app.get('/sliderCSS',function(req, res) {
-  res.sendFile(path.join(__dirname, 'nouislider.min.css'));
+  res.sendFile(path.join(__dirname, '/nouislider.min.css'));
 });
 app.get('/client', function(req, res) {
   res.sendFile(path.join(__dirname, 'JavaScript/','client.js'));
