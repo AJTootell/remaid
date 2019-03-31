@@ -1,4 +1,9 @@
 /*
+██████  ███████ ██████  ██ ██████  ███████  ██████ ████████
+██   ██ ██      ██   ██ ██ ██   ██ ██      ██         ██
+██████  █████   ██   ██ ██ ██████  █████   ██         ██
+██   ██ ██      ██   ██ ██ ██   ██ ██      ██         ██
+██   ██ ███████ ██████  ██ ██   ██ ███████  ██████    ██
 redirect - changes the url of the page
 
 Params:
@@ -8,17 +13,40 @@ Params:
 function redirect (url){
   location.href = url;
 }
+
 /*
+███████ ██████  ██████   ██████  ██████
+██      ██   ██ ██   ██ ██    ██ ██   ██
+█████   ██████  ██████  ██    ██ ██████
+██      ██   ██ ██   ██ ██    ██ ██   ██
+███████ ██   ██ ██   ██  ██████  ██   ██/
+error - Add error message to given parent element
+
+Params:
+  elParent - Parent element to add error, if empty add to body*
+  err - error message to add
+*/
+
+function error(elParent, err){
+  console.log(err)
+  if (!elParent){
+    var elParent = document.body
+  }
+  var el = document.createElement('p');
+  el.textContent = err;
+  elParent.appendChild(el);
+}
+
+/*
+ █████  ██████  ██████  ███    ███ ███████ ██████  ██  █████  ███████ ██ ██   ████████ ███████ ██████
+██   ██ ██   ██ ██   ██ ████  ████ ██      ██   ██ ██ ██   ██ ██      ██ ██      ██    ██      ██   ██
+███████ ██   ██ ██   ██ ██ ████ ██ █████   ██   ██ ██ ███████ █████   ██ ██      ██    █████   ██████
+██   ██ ██   ██ ██   ██ ██  ██  ██ ██      ██   ██ ██ ██   ██ ██      ██ ██      ██    ██      ██   ██
+██   ██ ██████  ██████  ██      ██ ███████ ██████  ██ ██   ██ ██      ██ ███████ ██    ███████ ██   ██
 addMediaFilter - Adds a new filters for users for given media type
 
 Params:
   mediaType - type of media to filter out
-*/
-
-/*
-addMediaFilter
-params:
-return:
 */
 
 function addMediaFilter(mediaType){
@@ -47,39 +75,36 @@ function addMediaFilter(mediaType){
   xhr.send();
 }
 /*
+ █████  ██████  ██████  ████████ ██ ███    ███ ███████ ███████ ██ ██   ████████ ███████ ██████
+██   ██ ██   ██ ██   ██    ██    ██ ████  ████ ██      ██      ██ ██      ██    ██      ██   ██
+███████ ██   ██ ██   ██    ██    ██ ██ ████ ██ █████   █████   ██ ██      ██    █████   ██████
+██   ██ ██   ██ ██   ██    ██    ██ ██  ██  ██ ██      ██      ██ ██      ██    ██      ██   ██
+██   ██ ██████  ██████     ██    ██ ██      ██ ███████ ██      ██ ███████ ██    ███████ ██   ██
 addTimeFilter - todo
-*/
-
-/*
-addTimeFilter
-params:
-return:
 */
 
 function addTimeFilter(){
 
 }
 /*
+ █████  ██████  ██████   ██████  █████  ████████ ███████  ██████   ██████  ██████  ██    ██
+██   ██ ██   ██ ██   ██ ██      ██   ██    ██    ██      ██       ██    ██ ██   ██  ██  ██
+███████ ██   ██ ██   ██ ██      ███████    ██    █████   ██   ███ ██    ██ ██████    ████
+██   ██ ██   ██ ██   ██ ██      ██   ██    ██    ██      ██    ██ ██    ██ ██   ██    ██
+██   ██ ██████  ██████   ██████ ██   ██    ██    ███████  ██████   ██████  ██   ██    ██
 addCategory - todo
-*/
-
-/*
-addCategory
-params:
-return:
 */
 
 function addCategory(){
 
 }
 /*
+ ██████  ███████ ████████ ███    ███ ███████ ██████  ██  █████
+██       ██         ██    ████  ████ ██      ██   ██ ██ ██   ██
+██   ███ █████      ██    ██ ████ ██ █████   ██   ██ ██ ███████
+██    ██ ██         ██    ██  ██  ██ ██      ██   ██ ██ ██   ██
+ ██████  ███████    ██    ██      ██ ███████ ██████  ██ ██   ██
 getMedia - gets a new media from server and displays dynamically on the page
-*/
-
-/*
-getMedia
-params:
-return:
 */
 
 function getMedia(){
@@ -92,22 +117,22 @@ function getMedia(){
 
   xhr.open('GET', url, true);
   xhr.onload = function() {
-    if (xhr.responseText == ''){
-      console.log("Error")
-      return;
-    }
-    var media = JSON.parse(xhr.responseText),
+    var media,
     el,
     elParent = document.getElementById('mediaHolder');
+    if (xhr.responseText == ''){
+      error(elParent, "No media left to view");
+      return;
+    }
+    media = JSON.parse(xhr.responseText);
     //el.class = 'media';
     switch(media.med_type){
       case "photo":
-        console.log("photo");
         el = document.createElement('img');
         el.src = media.med_filepath;
         el.alt = media.med_alt;
 
-        //el.id = media.med_id;
+        el.id = media.med_id;
         elParent.appendChild(el);
         break;
       case "video":
@@ -118,7 +143,7 @@ function getMedia(){
         el.textContent = media.med_alt;
         el.controls = ' ';
 
-        //el.id = media.med_id;
+        el.id = media.med_id;
         el.appendChild(elSrc);
         elParent.appendChild(el);
         break;
@@ -127,26 +152,51 @@ function getMedia(){
         el.src = media.med_filepath;
         el.controls = ' ';
 
-        //el.id = media.med_id;
+        el.id = media.med_id;
         elParent.appendChild(el);
         break;
       default:
-        console.log("Media type not supported")
+        error(elParent, "Media type not supported");
         break;
     }
-    console.log(el);
-    /*
-    {{else if isVideo}}
-      <video><source src="{{{mediaUrl}}}" type="video/webm">{{{mediaAlt}}}</video>
-    {{else}}
-      <audio controls src="{{{mediaUrl}}}"></audio>
-    {{/if}}
-    */
   }
   xhr.send();
 }
 
 /*
+██      ██ ██   ██ ███████ ███    ███ ███████ ██████  ██  █████
+██      ██ ██  ██  ██      ████  ████ ██      ██   ██ ██ ██   ██
+██      ██ █████   █████   ██ ████ ██ █████   ██   ██ ██ ███████
+██      ██ ██  ██  ██      ██  ██  ██ ██      ██   ██ ██ ██   ██
+███████ ██ ██   ██ ███████ ██      ██ ███████ ██████  ██ ██   ██
+likeMedia - Increase weight of all relevant categories
+*/
+
+function likeMedia(){
+  var
+  funcUrl = '/increWeight?',
+  xhr = new XMLHttpRequest(),
+  userId = sessionStorage.getItem('userId'),
+  elParent = document.getElementById('mediaHolder'),
+  medId = elParent.childNodes[1].id;
+
+  funcUrl += 'userId='+userId;
+  funcUrl += '&medId='+medId;
+
+  xhr.open('POST', funcUrl, true);
+  xhr.onload = function() {
+    redirect('/mediaDisplay');
+  }
+  xhr.send();
+
+}
+
+/*
+ █████  ██████  ██████  ██    ██ ███████ ███████ ██████
+██   ██ ██   ██ ██   ██ ██    ██ ██      ██      ██   ██
+███████ ██   ██ ██   ██ ██    ██ ███████ █████   ██████
+██   ██ ██   ██ ██   ██ ██    ██      ██ ██      ██   ██
+██   ██ ██████  ██████   ██████  ███████ ███████ ██   ██
 addUser - add a new user to server and set user id in browsers' local storage
 */
 
@@ -169,6 +219,11 @@ function addUser(){
 }
 
 /*
+██████  ██████  ███████ ███████ ███████ ████████ ████████ ██    ██ ██████  ███████ ███████ ██ ██   ████████ ███████ ██████  ███████
+██   ██ ██   ██ ██      ██      ██         ██       ██     ██  ██  ██   ██ ██      ██      ██ ██      ██    ██      ██   ██ ██
+██████  ██████  █████   ███████ █████      ██       ██      ████   ██████  █████   █████   ██ ██      ██    █████   ██████  ███████
+██      ██   ██ ██           ██ ██         ██       ██       ██    ██      ██      ██      ██ ██      ██    ██      ██   ██      ██
+██      ██   ██ ███████ ███████ ███████    ██       ██       ██    ██      ███████ ██      ██ ███████ ██    ███████ ██   ██ ███████
 presetTypeFilters - set media type buttons to match users preferences
 */
 
@@ -197,16 +252,15 @@ function presetTypeFilters(){
   xhr.send();
 }
 /*
+████████  ██████   ██████   ██████  ██      ███████  ██████  █████  ████████ ███████  ██████   ██████  ██████  ██ ███████ ███████
+   ██    ██    ██ ██       ██       ██      ██      ██      ██   ██    ██    ██      ██       ██    ██ ██   ██ ██ ██      ██
+   ██    ██    ██ ██   ███ ██   ███ ██      █████   ██      ███████    ██    █████   ██   ███ ██    ██ ██████  ██ █████   ███████
+   ██    ██    ██ ██    ██ ██    ██ ██      ██      ██      ██   ██    ██    ██      ██    ██ ██    ██ ██   ██ ██ ██           ██
+   ██     ██████   ██████   ██████  ███████ ███████  ██████ ██   ██    ██    ███████  ██████   ██████  ██   ██ ██ ███████ ███████
 toggleCategories - toggle button text from hidden to selected and vice versa
 
 Params:
   elButton - button element to toggle
-*/
-
-/*
-toggleCategories
-params:
-return:
 */
 
 function toggleCategories(elButton){
@@ -216,17 +270,14 @@ function toggleCategories(elButton){
     elButton.textContent = elButton.textContent.replace('Selected','Hidden');
   }
 }
-/*
-leaveCate - add new categorey filters to user
-
-Params:
-  url - url to redirect user to when categories has been updated
-*/
 
 /*
+███████ ███████ ████████ ██    ██ ██████  ███████ ██      ██ ██████  ███████ ██████
+██      ██         ██    ██    ██ ██   ██ ██      ██      ██ ██   ██ ██      ██   ██
+███████ █████      ██    ██    ██ ██████  ███████ ██      ██ ██   ██ █████   ██████
+     ██ ██         ██    ██    ██ ██           ██ ██      ██ ██   ██ ██      ██   ██
+███████ ███████    ██     ██████  ██      ███████ ███████ ██ ██████  ███████ ██   ██
 setupSlider
-params:
-return:
 */
 
 function setupSlider(){
@@ -252,9 +303,15 @@ function setupSlider(){
 }
 
 /*
+ ██████ ██   ██  █████  ███    ██  ██████  ███████ ████████ ██ ███    ███ ███████
+██      ██   ██ ██   ██ ████   ██ ██       ██         ██    ██ ████  ████ ██
+██      ███████ ███████ ██ ██  ██ ██   ███ █████      ██    ██ ██ ████ ██ █████
+██      ██   ██ ██   ██ ██  ██ ██ ██    ██ ██         ██    ██ ██  ██  ██ ██
+ ██████ ██   ██ ██   ██ ██   ████  ██████  ███████    ██    ██ ██      ██ ███████
 changeTime
 params:
-return:
+  id -
+  value -
 */
 
 function changeTime(id, value){
@@ -275,9 +332,14 @@ function changeTime(id, value){
 }
 
 /*
+██      ███████  █████  ██    ██ ███████ ████████ ██ ███    ███ ███████
+██      ██      ██   ██ ██    ██ ██         ██    ██ ████  ████ ██
+██      █████   ███████ ██    ██ █████      ██    ██ ██ ████ ██ █████
+██      ██      ██   ██  ██  ██  ██         ██    ██ ██  ██  ██ ██
+███████ ███████ ██   ██   ████   ███████    ██    ██ ██      ██ ███████
 leaveTime
 params:
-return:
+  url -
 */
 
 function leaveTime(url){
@@ -303,9 +365,15 @@ function leaveTime(url){
 }
 
 /*
-leaveCate
-params:
-return:
+██      ███████  █████  ██    ██ ███████  ██████  █████  ████████ ███████
+██      ██      ██   ██ ██    ██ ██      ██      ██   ██    ██    ██
+██      █████   ███████ ██    ██ █████   ██      ███████    ██    █████
+██      ██      ██   ██  ██  ██  ██      ██      ██   ██    ██    ██
+███████ ███████ ██   ██   ████   ███████  ██████ ██   ██    ██    ███████
+leaveCate - add new categorey filters to user
+
+Params:
+  url - url to redirect user to when categories has been updated
 */
 
 function leaveCate(url){
@@ -336,20 +404,21 @@ function leaveCate(url){
     funcUrl += '&cateId='+cateId;
     funcUrl += '&weight='+weight;
 
-    xhr.open('POST', funcUrl, true);
-    xhr.send();
+    if (cateId != ''){
+      xhr.open('POST', funcUrl, true);
+      xhr.send();
+    }
   }
 
   redirect(url);
 }
 /*
+ ██████  ███████ ████████  ██████  █████  ████████ ███████  ██████   ██████  ██████  ██ ███████ ███████
+██       ██         ██    ██      ██   ██    ██    ██      ██       ██    ██ ██   ██ ██ ██      ██
+██   ███ █████      ██    ██      ███████    ██    █████   ██   ███ ██    ██ ██████  ██ █████   ███████
+██    ██ ██         ██    ██      ██   ██    ██    ██      ██    ██ ██    ██ ██   ██ ██ ██           ██
+ ██████  ███████    ██     ██████ ██   ██    ██    ███████  ██████   ██████  ██   ██ ██ ███████ ███████
 getCategories - populate the page with 4 new random categories from server
-*/
-
-/*
-getCategories
-params:
-return:
 */
 
 function getCategories(){
@@ -363,25 +432,35 @@ function getCategories(){
   xhr.onload = function() {
     var categories = JSON.parse(xhr.responseText),
     elParent = document.getElementById('buttonHolder');
-    for (var i=0;i<categories.length;i++){
-      var elName = categories[i].cate_id + '_category_button',
-      elButton = document.createElement('button');
+    if (categories.length == 0){
+      error(elParent, "No categories left to view");
+    }
+    else {
+      for (var i=0;i<categories.length;i++){
+        var elName = categories[i].cate_id + '_category_button',
+        elButton = document.createElement('button');
 
-      elButton.id = elName;
-      elButton.classList.add('half_threeEight_button');
-      elButton.textContent = capitalizeFirstLetter(categories[i].cate_name)+': Hidden';
+        elButton.id = elName;
+        elButton.classList.add('half_threeEight_button');
+        elButton.textContent = capitalizeFirstLetter(categories[i].cate_name)+': Hidden';
 
-      elButton.onclick = function(){
-        toggleCategories(this);
+        elButton.onclick = function(){
+          toggleCategories(this);
+        }
+
+        elParent.appendChild(elButton);
       }
-
-      elParent.appendChild(elButton);
     }
   }
   xhr.send();
 }
 
 /*
+ ██████  █████  ██████  ██ ████████  █████  ██      ██ ███████ ███████ ███████ ██ ██████  ███████ ████████ ██      ███████ ████████ ████████ ███████ ██████
+██      ██   ██ ██   ██ ██    ██    ██   ██ ██      ██    ███  ██      ██      ██ ██   ██ ██         ██    ██      ██         ██       ██    ██      ██   ██
+██      ███████ ██████  ██    ██    ███████ ██      ██   ███   █████   █████   ██ ██████  ███████    ██    ██      █████      ██       ██    █████   ██████
+██      ██   ██ ██      ██    ██    ██   ██ ██      ██  ███    ██      ██      ██ ██   ██      ██    ██    ██      ██         ██       ██    ██      ██   ██
+ ██████ ██   ██ ██      ██    ██    ██   ██ ███████ ██ ███████ ███████ ██      ██ ██   ██ ███████    ██    ███████ ███████    ██       ██    ███████ ██   ██
 capitalizeFirstLetter - capitalize the first letter of the passed string
 */
 

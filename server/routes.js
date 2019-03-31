@@ -26,6 +26,9 @@ app.get('/time', function(req, res, next) {
 app.get('/geo', function(req, res, next) {
   res.render('geo');
 });
+app.get('/error', function(req, res, next) {
+  res.render('error',{err: req.query.err});
+});
 
 app.get('/styleSheet',  function(req, res) {
   //console.log("Getting CSS");
@@ -50,6 +53,9 @@ app.get('/getMedia', function(req,res){
 });
 app.post('/addFilter', function(req,res){
   serverFunc.addFilter(req, res)
+});
+app.post('/increWeight', function(req,res){
+  serverFunc.increWeight(req, res)
 });
 app.get('/getFilters', function(req,res){
   serverFunc.getFilters(req, res)

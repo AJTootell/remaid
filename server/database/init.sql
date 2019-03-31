@@ -119,5 +119,5 @@ insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Everyday life");
 
 insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (1, 1);
 insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (2, 2);
-insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (3, 3);
 insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (7, 2);
+insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (3, 3);

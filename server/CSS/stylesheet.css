@@ -1,20 +1,22 @@
 body, html {
-  width: 99%;
   height: 99%;
-}
-
-p {
-  color: red;
+  width: 99%;
 }
 
 mediaButtons {
-  width: 99%;
   height: 40%;
+  width: 99%;
+}
+
+audio, video, img{
+  height: 59%;
+  width: 99%;
+  object-fit: contain;
 }
 
 buttonHolder {
-  width: 99%;
   height: 70%;
+  width: 99%;
 }
 
 .half_whole_button {
@@ -43,6 +45,12 @@ buttonHolder {
 }
 .half_quarter_button {
   width : 45%;
+  height: 20%;
+  margin: 2%;
+  display: inline-block;
+}
+.third_quarter_button {
+  width : 27%;
   height: 20%;
   margin: 2%;
   display: inline-block;

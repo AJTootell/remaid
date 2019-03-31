@@ -41,6 +41,7 @@ function checkUserTimeout(){
   var query = 'select user_id,user_loginTime from rdc01hn4hfiuo1rv.user';
 
   function queryCB(err,data) {
+    var toRemove = [];
     for (var i=0;i<data.length;i++){
       var rowTime = data[i].user_loginTime;
       var lastLoginTime = parseInt(rowTime.split(':')[0])*60 + parseInt(rowTime.split(':')[1]);
@@ -48,7 +49,13 @@ function checkUserTimeout(){
       curTime = curTime.getHours()*60 + curTime.getMinutes();
       timeDiff = curTime - lastLoginTime;
       if (timeDiff>15){
-        removeUser(data[i].user_id)
+        toRemove.push(data[i].user_id);
+      }
+    }
+    for (var i=0;i<toRemove.length;i++){
+      setTimeout(cb,500*i,toRemove[i]);
+      function cb(id){
+        removeUser(id);
       }
     }
   }
@@ -65,6 +72,7 @@ Params:
 
 function removeUser(userId){
   util.debug("removing user");
+  util.debug(userId);
 
   var query = 'delete from rdc01hn4hfiuo1rv.usercate where user_id = ' + userId + ';';
 
@@ -129,6 +137,21 @@ function addFilter(req,res){
     default:
       break;
   }
+}
+
+/*
+increWeight - TODO
+*/
+
+function increWeight(req,res){
+
+    var userId = req.query.userId,
+    medId = req.query.medId;
+    updateLoginTime(userId);
+
+    var query = 'update rdc01hn4hfiuo1rv.usercate SET usercate_weight = usercate_weight + 1 where user_id = '+userId+' and where cate_id in (select cate_id from rdc01hn4hfiuo1rv.medcate where med_id = '+medId+');';
+
+    util.queryDB(query);
 }
 
 /*
@@ -202,11 +225,12 @@ function getCategory(req,res){
 
 }
 
-//setInterval(checkUserTimeout, 300000);
+setInterval(checkUserTimeout, 30000);
 
 module.exports.addUser = addUser;
 module.exports.removeUser = removeUser;
 module.exports.addFilter = addFilter;
+module.exports.increWeight = increWeight;
 module.exports.getFilters = getFilters;
 module.exports.getCategory = getCategory;
 module.exports.updateLoginTime = updateLoginTime;
