@@ -29,7 +29,7 @@ app.get('/geo', function(req, res, next) {
 
 app.get('/styleSheet',  function(req, res) {
   //console.log("Getting CSS");
-  res.sendFile(path.join(__dirname, '/CSS/styleSheet.css'));
+  res.sendFile(path.join(__dirname, '/CSS/stylesheet.css'));
 });
 app.get('/sliderCSS',function(req, res) {
   res.sendFile(path.join(__dirname, '/CSS/nouislider.min.css'));
