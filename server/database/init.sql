@@ -49,7 +49,8 @@ create table if not exists rdc01hn4hfiuo1rv.media (
 
 create table if not exists rdc01hn4hfiuo1rv.category (
   cate_id int not null auto_increment primary key,
-  cate_name varchar(15) not null
+  cate_name varchar(15) not null,
+  cate_icon_url varchar(50)
 );
 
 create table if not exists rdc01hn4hfiuo1rv.medcate (
@@ -109,13 +110,20 @@ insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, m
 insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year, reg_id, cou_id) values ("hovis", "video/HovisAdvert1973.mp4", "Hovis bike advert from 1973", "video", 1973-01-01, 1, 1);
 insert into rdc01hn4hfiuo1rv.media(med_title, med_filepath, med_alt, med_type, med_year) values ("drunkSailer", "audio/DrunkenSailer.mp3", "Drunken sailor shanty", "audio", 1800-01-01);
 
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Music");
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Adverts");
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Sailing");
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("World War 2");
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Church");
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Animals");
-insert into rdc01hn4hfiuo1rv.category(cate_name) values ("Everyday life");
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("Music","fas fa-music");
+
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("Adverts","fas fa-ad");
+
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("Sailing","fas fa-ship");
+
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("World_War_2","fas fa-shield-alt");
+
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("Church","fas fa-church");
+
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("Animals","fas fa-paw");
+
+insert into rdc01hn4hfiuo1rv.category(cate_name,cate_icon_url) values ("Everyday_life","fas fa-walking");
+
 
 insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (1, 1);
 insert into rdc01hn4hfiuo1rv.medcate(cate_id, med_id) values (2, 2);

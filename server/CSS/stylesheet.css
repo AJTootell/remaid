@@ -1,6 +1,29 @@
 body, html {
   height: 99%;
   width: 99%;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+button, p{
+  font-size: 1.3em;
+}
+
+decription{
+  height: 5%;
+  width: 99%;
+  padding: 0;
+  object-fit: contain;
+}
+
+buttonHolders{
+  height: 85%;
+  width: 99%;
+  padding: 0;
+  object-fit: contain;
 }
 
 mediaButtons {
@@ -14,7 +37,7 @@ audio, video, img{
   object-fit: contain;
 }
 
-buttonHolder {
+categoryHolder {
   height: 70%;
   width: 99%;
 }

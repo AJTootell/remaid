@@ -41,6 +41,9 @@ function checkUserTimeout(){
   var query = 'select user_id,user_loginTime from rdc01hn4hfiuo1rv.user';
 
   function queryCB(err,data) {
+    if (err || (data == undefined)){
+      return;
+    }
     var toRemove = [];
     for (var i=0;i<data.length;i++){
       var rowTime = data[i].user_loginTime;
@@ -226,7 +229,7 @@ function getCategory(req,res){
 
 }
 
-setInterval(checkUserTimeout, 30000);
+setInterval(checkUserTimeout, 300000);
 
 module.exports.addUser = addUser;
 module.exports.removeUser = removeUser;

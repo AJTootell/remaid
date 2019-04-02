@@ -32,7 +32,7 @@ function error(elParent, err){
   if (!elParent){
     var elParent = document.body
   }
-  var el = document.createElement('p');
+  var el = document.createElement('h1');
   el.textContent = err;
   elParent.appendChild(el);
 }
@@ -63,7 +63,7 @@ function addMediaFilter(buttonEl){
   else{
     weight = 1;
   }
-  toggleCategories(buttonEl);
+  toggleButton(buttonEl);
 
   url += "userId="+userId+"&";
   url += "type="+mediaType+"&";
@@ -123,6 +123,11 @@ function getMedia(){
       return;
     }
     media = JSON.parse(xhr.responseText);
+    var
+    headerHolder = document.getElementsByTagName('description')[0],
+    headerEl = document.createElement('h1');
+    headerEl.textContent = media.med_alt;
+    headerHolder.appendChild(headerEl);
     //el.class = 'media';
     switch(media.med_type){
       case "photo":
@@ -240,7 +245,7 @@ function presetTypeFilters(){
       elName = filters[i].name + '_filter_button',
       buttonEl = document.getElementById(elName);
       if (filters[i].weight == 0){
-        toggleCategories(buttonEl);
+        toggleButton(buttonEl);
       }
     }
   }
@@ -252,17 +257,17 @@ function presetTypeFilters(){
    ██    ██    ██ ██   ███ ██   ███ ██      █████   ██      ███████    ██    █████   ██   ███ ██    ██ ██████  ██ █████   ███████
    ██    ██    ██ ██    ██ ██    ██ ██      ██      ██      ██   ██    ██    ██      ██    ██ ██    ██ ██   ██ ██ ██           ██
    ██     ██████   ██████   ██████  ███████ ███████  ██████ ██   ██    ██    ███████  ██████   ██████  ██   ██ ██ ███████ ███████
-toggleCategories - toggle button text from hidden to selected and vice versa
+toggleButton - toggle button text from hidden to selected and vice versa
 
 Params:
   elButton - button element to toggle
 */
 
-function toggleCategories(elButton){
-  if (elButton.textContent.includes('Hidden')){
-    elButton.textContent = elButton.textContent.replace('Hidden','Selected');
+function toggleButton(elButton){
+  if (elButton.innerHTML.includes('Hidden')){
+    elButton.innerHTML = elButton.innerHTML.replace('Hidden','Selected');
   }else{
-    elButton.textContent = elButton.textContent.replace('Selected','Hidden');
+    elButton.innerHTML = elButton.innerHTML.replace('Selected','Hidden');
   }
 }
 
@@ -373,7 +378,7 @@ Params:
 
 function leaveCate(url){
 
-  var elParent = document.getElementById('buttonHolder'),
+  var elParent = document.getElementById('categoryHolder'),
   userId = sessionStorage.getItem('userId');
   console.log('0');
   for (var i=1;i<elParent.childNodes.length;i++){
@@ -424,21 +429,31 @@ function getCategories(){
   xhr.open('GET', url, true);
   xhr.onload = function() {
     var categories = JSON.parse(xhr.responseText),
-    elParent = document.getElementById('buttonHolder');
+    elParent = document.getElementById('categoryHolder');
     if (categories.length == 0){
       error(elParent, "No categories left to view");
     }
     else {
       for (var i=0;i<categories.length;i++){
+        console.log(categories[i].cate_icon_url);
         var elName = categories[i].cate_id + '_category_button',
-        elButton = document.createElement('button');
+        elButton = document.createElement('button'),
+        re = new RegExp('_', 'g'),
+        cate_name = categories[i].cate_name.replace(re,' '),
+        icon = document.createElement('i'),
+        text = document.createElement('p');
 
         elButton.id = elName;
         elButton.classList.add('half_threeEight_button');
-        elButton.textContent = capitalizeFirstLetter(categories[i].cate_name)+': Hidden';
+
+        icon.setAttribute("class", categories[i].cate_icon_url)
+        elButton.appendChild(icon);
+
+        text.textContent = capitalizeFirstLetter(cate_name)+': Hidden ';
+        elButton.appendChild(text);
 
         elButton.onclick = function(){
-          toggleCategories(this);
+          toggleButton(this);
         }
 
         elParent.appendChild(elButton);
