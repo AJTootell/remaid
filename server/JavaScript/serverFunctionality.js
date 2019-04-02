@@ -137,6 +137,7 @@ function addFilter(req,res){
     default:
       break;
   }
+  res.send();
 }
 
 /*

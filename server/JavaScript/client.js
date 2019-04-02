@@ -49,23 +49,21 @@ Params:
   mediaType - type of media to filter out
 */
 
-function addMediaFilter(mediaType){
+function addMediaFilter(buttonEl){
   var
   userId = sessionStorage.getItem('userId'),
-  elName = mediaType + '_filter_button',
-  buttonEl = document.getElementById(elName),
+  mediaType = buttonEl.id.split('_')[0]
   url = '/addFilter?',
   xhr = new XMLHttpRequest(),
   weight = 0;
 
   if (buttonEl.textContent.includes('Selected')) {
     weight = 0;
-    buttonEl.textContent = capitalizeFirstLetter(mediaType) + ": Hidden";
   }
   else{
     weight = 1;
-    buttonEl.textContent = capitalizeFirstLetter(mediaType) + ": Selected";
   }
+  toggleCategories(buttonEl);
 
   url += "userId="+userId+"&";
   url += "type="+mediaType+"&";
@@ -241,11 +239,8 @@ function presetTypeFilters(){
       var
       elName = filters[i].name + '_filter_button',
       buttonEl = document.getElementById(elName);
-      if (filters[i].weight == 1){
-        buttonEl.textContent = capitalizeFirstLetter(filters[i].name) + ": Selected";
-      }
-      else{
-        buttonEl.textContent = capitalizeFirstLetter(filters[i].name) + ": Hidden";
+      if (filters[i].weight == 0){
+        toggleCategories(buttonEl);
       }
     }
   }
@@ -380,11 +375,9 @@ function leaveCate(url){
 
   var elParent = document.getElementById('buttonHolder'),
   userId = sessionStorage.getItem('userId');
-
+  console.log('0');
   for (var i=1;i<elParent.childNodes.length;i++){
-    console.log(elParent.childNodes[i]);
-
-
+//    console.log(elParent.childNodes[i]);
     var
     elButton = elParent.childNodes[i],
     funcUrl = '/addFilter?',
@@ -403,9 +396,9 @@ function leaveCate(url){
     funcUrl += '&type='+type;
     funcUrl += '&cateId='+cateId;
     funcUrl += '&weight='+weight;
-
+    console.log("Category: " + cateId + " set to: "+weight);
     if (cateId != ''){
-      xhr.open('POST', funcUrl, true);
+      xhr.open('POST', funcUrl, false);
       xhr.send();
     }
   }
