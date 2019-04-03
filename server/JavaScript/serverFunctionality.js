@@ -229,6 +229,23 @@ function getCategory(req,res){
 
 }
 
+function resetFilters(req,res){
+  util.debug("reseting user");
+
+  var userId = req.query.userId;
+  util.debug(userId);
+
+  var query = 'delete from rdc01hn4hfiuo1rv.usercate where user_id = ' + userId + ';';
+
+  function usercateCB(err,data){
+    var query = 'delete from rdc01hn4hfiuo1rv.usermed where user_id = ' + userId + ';';
+
+    util.queryDB(query);
+  }
+
+  util.queryDB(query,usercateCB);
+}
+
 setInterval(checkUserTimeout, 300000);
 
 module.exports.addUser = addUser;
@@ -238,3 +255,4 @@ module.exports.increWeight = increWeight;
 module.exports.getFilters = getFilters;
 module.exports.getCategory = getCategory;
 module.exports.updateLoginTime = updateLoginTime;
+module.exports.resetFilters = resetFilters;

@@ -63,5 +63,8 @@ app.get('/getFilters', function(req,res){
 app.get('/getCategory', function(req,res){
   serverFunc.getCategory(req, res)
 });
+app.post('/resetFilters', function(req,res){
+  serverFunc.resetFilters(req, res)
+});
 
 module.exports = app;

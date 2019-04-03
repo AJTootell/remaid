@@ -221,6 +221,16 @@ function addUser(){
   }
 }
 
+function resetFilters(){
+  var
+  userId = sessionStorage.getItem('userId'),
+  url = '/resetFilters?',
+  xhr = new XMLHttpRequest();
+  url += "userId="+userId;
+  xhr.open('POST', url, true);
+  xhr.send();
+}
+
 /*
 ██████  ██████  ███████ ███████ ███████ ████████ ████████ ██    ██ ██████  ███████ ███████ ██ ██   ████████ ███████ ██████  ███████
 ██   ██ ██   ██ ██      ██      ██         ██       ██     ██  ██  ██   ██ ██      ██      ██ ██      ██    ██      ██   ██ ██
@@ -482,6 +492,7 @@ window.addEventListener('load', function() {
     case '':
       //if connection without a userId in session data then create a new user
       addUser();
+      resetFilters();
       break;
     case 'mediaDisplay':
       //get media from server and display it on the page
@@ -500,6 +511,5 @@ window.addEventListener('load', function() {
       break;
     default:
       break;
-
   }
 });
